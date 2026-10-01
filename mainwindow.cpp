@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     ActivityPage *activity = new ActivityPage(this);
     activity_scroll->setWidget(activity);
     activity_scroll->setWidgetResizable(true);
-    ui->stacked_pages->addWidget(activity_scroll);
+    ui->pages->addWidget(activity_scroll);
 
 }
 
@@ -23,8 +23,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::changePage(int page)
 {
-    if (ui->stacked_pages->currentIndex() != page)
+    if (ui->pages->currentIndex() != page)
     {
-        ui->stacked_pages->setCurrentIndex(page);
+        ui->pages->setCurrentIndex(page);
     }
 }

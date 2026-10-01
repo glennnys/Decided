@@ -16,6 +16,12 @@ qt_add_executable(Decided
     mealwindow.h mealwindow.cpp mealwindow.ui
     activitypage.h activitypage.cpp activitypage.ui
 
+    genactivity.h genactivity.cpp genactivity.ui
+    mngactivity.h mngactivity.cpp mngactivity.ui
+    mainsettings.h mainsettings.cpp mainsettings.ui
+
+
+
 )
 
 target_link_libraries(Decided

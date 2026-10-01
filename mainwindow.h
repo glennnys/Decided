@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QDateTime>
 #include <QScrollArea>
+#include <QPropertyAnimation>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
