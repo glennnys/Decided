@@ -78,7 +78,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="close">
+         <widget class="QPushButton" name="close_btn">
           <property name="text">
            <string/>
           </property>
@@ -106,7 +106,7 @@
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="activities_btn">
         <property name="font">
          <font>
           <pointsize>14</pointsize>
@@ -118,7 +118,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="meals_btn">
         <property name="font">
          <font>
           <pointsize>14</pointsize>

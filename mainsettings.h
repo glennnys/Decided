@@ -19,6 +19,9 @@ public:
     void close();
     void toggle();
 
+signals:
+    void page_selected(int page_nr);
+
 private:
     Ui::MainSettings *ui;
     bool m_open = false;

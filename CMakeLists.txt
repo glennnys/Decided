@@ -13,7 +13,7 @@ qt_add_executable(Decided
     mainwindow.h
     mainwindow.ui
 
-    mealwindow.h mealwindow.cpp mealwindow.ui
+    mealpage.h mealpage.cpp mealpage.ui
     activitypage.h activitypage.cpp activitypage.ui
 
     genactivity.h genactivity.cpp genactivity.ui

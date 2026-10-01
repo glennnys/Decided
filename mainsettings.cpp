@@ -1,6 +1,5 @@
 #include "mainsettings.h"
 #include "ui_mainsettings.h"
-
 #include <QPropertyAnimation>
 
 MainSettings::MainSettings(QWidget *parent)
@@ -9,7 +8,10 @@ MainSettings::MainSettings(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->close, &QPushButton::clicked, this, &MainSettings::close);
+    connect(ui->close_btn, &QPushButton::clicked, this, &MainSettings::close);
+
+    connect(ui->activities_btn, &QPushButton::clicked, this, [this]{ emit page_selected(0); });
+    connect(ui->meals_btn, &QPushButton::clicked, this, [this]{ page_selected(1); });
 }
 
 MainSettings::~MainSettings()

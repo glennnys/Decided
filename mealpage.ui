@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MealWindow</class>
- <widget class="QDialog" name="MealWindow">
+ <class>MealPage</class>
+ <widget class="QDialog" name="MealPage">
   <property name="enabled">
    <bool>true</bool>
   </property>
