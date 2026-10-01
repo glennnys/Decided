@@ -15,8 +15,13 @@ public:
     explicit MainSettings(QWidget *parent = nullptr);
     ~MainSettings();
 
+    void open();
+    void close();
+    void toggle();
+
 private:
     Ui::MainSettings *ui;
+    bool m_open = false;
 };
 
 #endif // MAINSETTINGS_H

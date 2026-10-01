@@ -17,6 +17,7 @@ public:
 
 private:
     Ui::ActivityPage *ui;
+    void toggleMenu();
 };
 
 #endif // ACTIVITYPAGE_H
