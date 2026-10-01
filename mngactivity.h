@@ -17,6 +17,9 @@ public:
 
 private:
     Ui::MngActivity *ui;
+
+    void clear();
+    void create_item(bool editing, QString ini_name, QString ini_desc);
 };
 
 #endif // MNGACTIVITY_H

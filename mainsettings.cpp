@@ -10,8 +10,8 @@ MainSettings::MainSettings(QWidget *parent)
 
     connect(ui->close_btn, &QPushButton::clicked, this, &MainSettings::close);
 
-    connect(ui->activities_btn, &QPushButton::clicked, this, [this]{ emit page_selected(0); });
-    connect(ui->meals_btn, &QPushButton::clicked, this, [this]{ page_selected(1); });
+    connect(ui->activities_btn, &QPushButton::clicked, this, [this]{ emit page_selected(0); close();});
+    connect(ui->meals_btn, &QPushButton::clicked, this, [this]{ page_selected(1); close();});
 }
 
 MainSettings::~MainSettings()
