@@ -2,6 +2,8 @@
 #define MNGACTIVITY_H
 
 #include <QWidget>
+#include <QHash>
+#include "structs.h"
 
 namespace Ui {
 class MngActivity;
@@ -17,9 +19,11 @@ public:
 
 private:
     Ui::MngActivity *ui;
+    QHash<int, Item> cur_item_list, new_item_list;
+    QHash<int, Activity> cur_act_list, new_act_list;
 
     void clear();
-    void create_item(bool editing, QString ini_name, QString ini_desc);
+    void load_items();
 };
 
 #endif // MNGACTIVITY_H

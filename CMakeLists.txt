@@ -19,6 +19,8 @@ qt_add_executable(Decided
     genactivity.h genactivity.cpp genactivity.ui
     mngactivity.h mngactivity.cpp mngactivity.ui
     mainsettings.h mainsettings.cpp mainsettings.ui
+    structs.h
+
 
 
 

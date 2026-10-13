@@ -30,6 +30,47 @@
     <number>0</number>
    </property>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_10">
+     <item>
+      <spacer name="horizontalSpacer_5">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="cancel_changes">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="save_changes">
+       <property name="font">
+        <font>
+         <pointsize>16</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Save all changes</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
       <number>10</number>
@@ -401,7 +442,7 @@
            <item>
             <widget class="QPushButton" name="confirm_act_btn">
              <property name="text">
-              <string>Confirm</string>
+              <string>Confirm activity</string>
              </property>
             </widget>
            </item>
@@ -789,7 +830,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
            <item>
             <widget class="QPushButton" name="confirm_item_btn">
              <property name="text">
-              <string>Confirm</string>
+              <string>Confirm item</string>
              </property>
             </widget>
            </item>

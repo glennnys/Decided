@@ -25,7 +25,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(close_menu, &QShortcut::activated, settings, &MainSettings::close);
 
     //Set selected page
-    connect(settings, &MainSettings::page_selected, this, &MainWindow::changePage);
+    connect(settings, &MainSettings::page_selected, this, &MainWindow::change_page);
 
 
     //Scrollable area for activity page
@@ -48,7 +48,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::changePage(int page)
+void MainWindow::change_page(int page)
 {
     if (ui->pages->currentIndex() != page)
     {

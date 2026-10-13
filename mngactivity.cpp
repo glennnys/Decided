@@ -20,17 +20,19 @@ void MngActivity::clear()
     ui->item_desc_entry->clear();
 }
 
-void MngActivity::create_item(bool editing, QString ini_name, QString ini_desc)
+void MngActivity::load_items()
 {
+    QSqlDatabase activityDb = QSqlDatabase::database("activity");
 
-    const QString name = ui->item_name_entry->text();
-    const QString desc = ui->item_desc_entry->document()->toPlainText();
-    if (editing)
-    {
-        emit itemEdited(ini_name, ini_desc, name, desc);
+    QSqlQuery query(activityDb);
+
+    if (!query.exec("SELECT id, name, description FROM Items")) {
+        qWarning() << "Query failed:" << query.lastError();
+    } else {
+        while (query.next()) {
+            cur_item_list.insert(query.value(0).toInt(), {false, query.value(1).toString(), query.value(0).toString()});
+        }
     }
-    else
-    {
-        emit itemCreated(name, desc);
-    }
+
+    new_item_list = cur_item_list;
 }

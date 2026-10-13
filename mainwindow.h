@@ -21,7 +21,7 @@ public:
     ~MainWindow();
 
 public slots:
-    void changePage(int page);
+    void change_page(int page);
 
 private:
     Ui::MainWindow *ui;
