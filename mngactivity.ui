@@ -442,7 +442,7 @@
            <item>
             <widget class="QPushButton" name="cancel_act_btn">
              <property name="text">
-              <string>Cancel</string>
+              <string>Clear</string>
              </property>
             </widget>
            </item>
@@ -582,7 +582,7 @@
                 </widget>
                </item>
                <item>
-                <widget class="QPushButton" name="remove_item_btn_3">
+                <widget class="QPushButton" name="delete_item_btn">
                  <property name="toolTip">
                   <string>Delete selected item</string>
                  </property>
@@ -741,7 +741,13 @@
               </layout>
              </item>
              <item>
-              <widget class="QListWidget" name="selected_item_list"/>
+              <widget class="QListWidget" name="selected_item_list">
+               <item>
+                <property name="text">
+                 <string>test</string>
+                </property>
+               </item>
+              </widget>
              </item>
             </layout>
            </item>
@@ -857,7 +863,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
               <string>Clear item creation fields</string>
              </property>
              <property name="text">
-              <string>Cancel</string>
+              <string>Clear</string>
              </property>
             </widget>
            </item>

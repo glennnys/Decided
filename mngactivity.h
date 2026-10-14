@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QHash>
+#include <qlistwidget.h>
 #include "utils.h"
 
 namespace Ui {
@@ -21,14 +22,18 @@ private:
     Ui::MngActivity *ui;
     QHash<int, Item> cur_item_list, new_item_list;
     QHash<int, Activity> cur_act_list, new_act_list;
+    int editing_item, editing_act;
 
     void cancel_changes();
     void save_changes();
 
     void add_item();
     void load_items();
-    void set_item_display();
+    void delete_item();
     void cancel_item();
+    void edit_item(QListWidgetItem *item);
+
+    void set_item_display();
 };
 
 #endif // MNGACTIVITY_H
