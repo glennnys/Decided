@@ -4,6 +4,9 @@ project(Decided LANGUAGES CXX)
 find_package(Qt6 6.5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt6 COMPONENTS Sql REQUIRED)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 qt_standard_project_setup()
 
 qt_add_executable(Decided
@@ -19,7 +22,8 @@ qt_add_executable(Decided
     genactivity.h genactivity.cpp genactivity.ui
     mngactivity.h mngactivity.cpp mngactivity.ui
     mainsettings.h mainsettings.cpp mainsettings.ui
-    structs.h
+    utils.h
+    utils.cpp
 
 
 

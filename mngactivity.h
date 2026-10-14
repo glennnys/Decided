@@ -3,7 +3,7 @@
 
 #include <QWidget>
 #include <QHash>
-#include "structs.h"
+#include "utils.h"
 
 namespace Ui {
 class MngActivity;
@@ -22,8 +22,13 @@ private:
     QHash<int, Item> cur_item_list, new_item_list;
     QHash<int, Activity> cur_act_list, new_act_list;
 
-    void clear();
+    void cancel_changes();
+    void save_changes();
+
+    void add_item();
     void load_items();
+    void set_item_display();
+    void cancel_item();
 };
 
 #endif // MNGACTIVITY_H

@@ -71,6 +71,13 @@
     </layout>
    </item>
    <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
       <number>10</number>
@@ -442,7 +449,7 @@
            <item>
             <widget class="QPushButton" name="confirm_act_btn">
              <property name="text">
-              <string>Confirm activity</string>
+              <string>Add activity</string>
              </property>
             </widget>
            </item>
@@ -553,6 +560,9 @@
               <layout class="QHBoxLayout" name="horizontalLayout_2">
                <item>
                 <widget class="QLineEdit" name="search_item_entry">
+                 <property name="toolTip">
+                  <string>Search item list</string>
+                 </property>
                  <property name="placeholderText">
                   <string>Search</string>
                  </property>
@@ -560,6 +570,9 @@
                </item>
                <item>
                 <widget class="QPushButton" name="search_item_refresh">
+                 <property name="toolTip">
+                  <string>Reset search string</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -570,6 +583,9 @@
                </item>
                <item>
                 <widget class="QPushButton" name="remove_item_btn_3">
+                 <property name="toolTip">
+                  <string>Delete selected item</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -604,6 +620,9 @@
               <layout class="QVBoxLayout" name="verticalLayout_4">
                <item>
                 <widget class="QPushButton" name="add_item_btn">
+                 <property name="toolTip">
+                  <string>Add selected item as activity requirement</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -614,6 +633,9 @@
                </item>
                <item>
                 <widget class="QPushButton" name="remove_item_btn">
+                 <property name="toolTip">
+                  <string>Remove selected item as a requirement</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -624,6 +646,9 @@
                </item>
                <item>
                 <widget class="QPushButton" name="reset_item_list">
+                 <property name="toolTip">
+                  <string>Remove all items from activity requirements</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -692,6 +717,9 @@
               <layout class="QHBoxLayout" name="horizontalLayout_9">
                <item>
                 <widget class="QLineEdit" name="search_req_entry">
+                 <property name="toolTip">
+                  <string>search activity requirements</string>
+                 </property>
                  <property name="placeholderText">
                   <string>Search</string>
                  </property>
@@ -699,6 +727,9 @@
                </item>
                <item>
                 <widget class="QPushButton" name="search_req_refresh">
+                 <property name="toolTip">
+                  <string>Reset activity search string</string>
+                 </property>
                  <property name="text">
                   <string/>
                  </property>
@@ -822,6 +853,9 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </item>
            <item>
             <widget class="QPushButton" name="cancel_item_btn">
+             <property name="toolTip">
+              <string>Clear item creation fields</string>
+             </property>
              <property name="text">
               <string>Cancel</string>
              </property>
@@ -829,8 +863,11 @@ li.checked::marker { content: &quot;\2612&quot;; }
            </item>
            <item>
             <widget class="QPushButton" name="confirm_item_btn">
+             <property name="toolTip">
+              <string/>
+             </property>
              <property name="text">
-              <string>Confirm item</string>
+              <string>Add item</string>
              </property>
             </widget>
            </item>
