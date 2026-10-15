@@ -64,7 +64,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Save all changes</string>
+        <string>Save</string>
        </property>
       </widget>
      </item>
@@ -135,6 +135,9 @@
           <layout class="QHBoxLayout" name="horizontalLayout_5">
            <item>
             <widget class="QLineEdit" name="search_act_entry">
+             <property name="toolTip">
+              <string>Search activity list</string>
+             </property>
              <property name="placeholderText">
               <string>Search</string>
              </property>
@@ -142,6 +145,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="search_act_refresh">
+             <property name="toolTip">
+              <string>Reset search string</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -151,7 +157,10 @@
             </widget>
            </item>
            <item>
-            <widget class="QPushButton" name="remove_act_btn">
+            <widget class="QPushButton" name="delete_act_btn">
+             <property name="toolTip">
+              <string>Delete selected activity</string>
+             </property>
              <property name="text">
               <string/>
              </property>
@@ -306,7 +315,11 @@
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QTimeEdit" name="act_dur_entry"/>
+            <widget class="QTimeEdit" name="act_dur_entry">
+             <property name="toolTip">
+              <string>Set the average/typical duration for the activity</string>
+             </property>
+            </widget>
            </item>
            <item row="3" column="0">
             <widget class="QLabel" name="label_6">
@@ -441,6 +454,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="cancel_act_btn">
+             <property name="toolTip">
+              <string>Clear activity creation fields</string>
+             </property>
              <property name="text">
               <string>Clear</string>
              </property>
@@ -741,13 +757,7 @@
               </layout>
              </item>
              <item>
-              <widget class="QListWidget" name="selected_item_list">
-               <item>
-                <property name="text">
-                 <string>test</string>
-                </property>
-               </item>
-              </widget>
+              <widget class="QListWidget" name="selected_item_list"/>
              </item>
             </layout>
            </item>
@@ -888,5 +898,70 @@ li.checked::marker { content: &quot;\2612&quot;; }
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>act_min_p_slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>act_min_p_spin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>273</x>
+     <y>799</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>284</x>
+     <y>769</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>act_min_p_spin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>act_min_p_slider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>259</x>
+     <y>774</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>253</x>
+     <y>794</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>act_max_p_slider</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>act_max_p_spin</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>487</x>
+     <y>794</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>508</x>
+     <y>771</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>act_max_p_spin</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>act_max_p_slider</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>556</x>
+     <y>771</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>540</x>
+     <y>794</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

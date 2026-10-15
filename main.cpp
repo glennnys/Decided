@@ -44,36 +44,44 @@ bool connectActivityDb(QString folder_path){
         query.exec(R"( CREATE TABLE IF NOT EXISTS "Activities" (
             "id"	INTEGER NOT NULL UNIQUE,
             "name"	VARCHAR(255) NOT NULL,
+            "description"	VARCHAR(255),
             "duration"	INTEGER,
             "minPlayers"	INTEGER,
             "maxPlayers"	INTEGER,
-            "explanation"	VARCHAR(255),
-            "theme"	VARCHAR(255),
-            PRIMARY KEY("id" AUTOINCREMENT),
-            FOREIGN KEY("theme") REFERENCES "Themes"("name") ON UPDATE CASCADE ON DELETE SET NULL
+            PRIMARY KEY("id" AUTOINCREMENT)
         ); )");
         if (query.lastError().isValid()){ qDebug() << query.lastError(); }
 
         query.exec(R"( CREATE TABLE IF NOT EXISTS "ActivityRequirements" (
             "activityId"	INTEGER NOT NULL,
             "itemId"	INTEGER NOT NULL,
-            CONSTRAINT "id" PRIMARY KEY("activityId","itemId"),
+            PRIMARY KEY("activityId","itemId"),
             FOREIGN KEY("activityId") REFERENCES "Activities"("id") ON UPDATE CASCADE ON DELETE CASCADE,
             FOREIGN KEY("itemId") REFERENCES "Items"("id") ON UPDATE CASCADE ON DELETE CASCADE
         ); )");
         if (query.lastError().isValid()){ qDebug() << query.lastError(); }
 
-        query.exec(R"( CREATE TABLE IF NOT EXISTS "Items" (
-                "id"	INTEGER NOT NULL UNIQUE,
-                "name"	VARCHAR(255) NOT NULL UNIQUE,
-                "description"	VARCHAR(255),
-                PRIMARY KEY("id" AUTOINCREMENT)
-            ); )");
+        query.exec(R"( CREATE TABLE IF NOT EXISTS "ActivityTags" (
+            "activityId"	INTEGER NOT NULL,
+            "tagId"	INTEGER NOT NULL,
+            PRIMARY KEY("activityId","tagId"),
+            FOREIGN KEY("activityId") REFERENCES "Activities"("id") ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY("tagId") REFERENCES "Tags"("id") ON UPDATE CASCADE ON DELETE CASCADE
+        ); )");
         if (query.lastError().isValid()){ qDebug() << query.lastError(); }
 
-        query.exec(R"( CREATE TABLE IF NOT EXISTS "Themes" (
-            "name"	INTEGER NOT NULL UNIQUE,
-            PRIMARY KEY("name")
+        query.exec(R"( CREATE TABLE IF NOT EXISTS "Items" (
+            "id"	INTEGER NOT NULL UNIQUE,
+            "name"	VARCHAR(255) NOT NULL UNIQUE,
+            "description"	VARCHAR(255),
+            PRIMARY KEY("id" AUTOINCREMENT)
+        ); )");
+        if (query.lastError().isValid()){ qDebug() << query.lastError(); }
+
+        query.exec(R"( CREATE TABLE IF NOT EXISTS "Tags" (
+            "id"	INTEGER NOT NULL UNIQUE,
+            "name"	VARCHAR(255) NOT NULL UNIQUE,
+            PRIMARY KEY("id" AUTOINCREMENT)
         ); )");
         if (query.lastError().isValid()){ qDebug() << query.lastError(); }
 

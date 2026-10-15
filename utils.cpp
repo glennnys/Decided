@@ -16,10 +16,14 @@ int find_same_name(const QString& name, const QHash<int, T>& list)
 template int find_same_name<Item>(const QString&, const QHash<int, Item>&);
 template int find_same_name<Activity>(const QString&, const QHash<int, Activity>&);
 
-int generate_id(const QList<int>& ids)
+int generate_id(const QList<int>& old_ids, const QList<int>& new_ids)
 {
-    if (ids.isEmpty())
+    if (old_ids.isEmpty() && new_ids.isEmpty())
         return 1;
 
-    return *std::max_element(ids.begin(), ids.end()) + 1;
+    QSet<int> all_ids = QSet<int>(old_ids.begin(), old_ids.end());
+
+    all_ids.unite(QSet<int>(new_ids.begin(), new_ids.end()));
+
+    return *std::max_element(all_ids.begin(), all_ids.end()) + 1;
 }

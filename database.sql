@@ -1,0 +1,36 @@
+BEGIN TRANSACTION;
+CREATE TABLE IF NOT EXISTS "Activities" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"name"	VARCHAR(255) NOT NULL,
+	"description"	VARCHAR(255),
+	"duration"	INTEGER,
+	"minPlayers"	INTEGER,
+	"maxPlayers"	INTEGER,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+CREATE TABLE IF NOT EXISTS "ActivityRequirements" (
+	"activityId"	INTEGER NOT NULL,
+	"itemId"	INTEGER NOT NULL,
+	PRIMARY KEY("activityId","itemId"),
+	FOREIGN KEY("activityId") REFERENCES "Activities"("id") ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY("itemId") REFERENCES "Items"("id") ON UPDATE CASCADE ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "ActivityTags" (
+	"activityId"	INTEGER NOT NULL,
+	"tagId"	INTEGER NOT NULL,
+	PRIMARY KEY("activityId","tagId"),
+	FOREIGN KEY("activityId") REFERENCES "Activities"("id") ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY("tagId") REFERENCES "Tags"("id") ON UPDATE CASCADE ON DELETE CASCADE
+);
+CREATE TABLE IF NOT EXISTS "Items" (
+                "id"	INTEGER NOT NULL UNIQUE,
+                "name"	VARCHAR(255) NOT NULL UNIQUE,
+                "description"	VARCHAR(255),
+                PRIMARY KEY("id" AUTOINCREMENT)
+            );
+CREATE TABLE IF NOT EXISTS "Tags" (
+	"id"	INTEGER NOT NULL UNIQUE,
+	"name"	VARCHAR(255) NOT NULL,
+	PRIMARY KEY("id" AUTOINCREMENT)
+);
+COMMIT;
