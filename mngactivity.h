@@ -20,25 +20,14 @@ public:
 
 private:
     Ui::MngActivity *ui;
-    QHash<int, Item> cur_item_list, new_item_list;
     QHash<int, Activity> cur_act_list, new_act_list;
-    int editing_item, editing_act;
-    QSet<int> selected_items;
+    int editing_act;
+
+    QWidget *current_widget = nullptr;
+    void setContentWidget(QWidget *widget);
 
     void cancel_changes();
     void save_changes();
-
-    void set_item_display();
-
-    void load_items();
-    void cancel_item();
-    void add_item();
-    void delete_item();
-    void edit_item(QListWidgetItem *item);
-
-    void select_item();
-    void deselect_item();
-    void reset_selection();
 
     void set_act_display();
 
