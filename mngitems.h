@@ -18,9 +18,6 @@ public:
     explicit MngItems(QWidget *parent = nullptr);
     ~MngItems();
 
-private:
-    Ui::MngItems *ui;
-
     QHash<int, Item> cur_item_list, new_item_list;
     int editing_item;
     QSet<int> selected_items;
@@ -30,8 +27,13 @@ private:
 
     void set_item_display();
 
-    void load_items();
     void cancel_item();
+
+private:
+    Ui::MngItems *ui;
+
+
+    void load_items();
     void add_item();
     void delete_item();
     void edit_item(QListWidgetItem *item);

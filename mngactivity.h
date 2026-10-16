@@ -5,6 +5,7 @@
 #include <QHash>
 #include <qlistwidget.h>
 #include "utils.h"
+#include "mngitems.h"
 
 namespace Ui {
 class MngActivity;
@@ -20,11 +21,13 @@ public:
 
 private:
     Ui::MngActivity *ui;
-    QHash<int, Activity> cur_act_list, new_act_list;
-    int editing_act;
+    MngItems *itemWidget;
 
     QWidget *current_widget = nullptr;
     void setContentWidget(QWidget *widget);
+
+    QHash<int, Activity> cur_act_list, new_act_list;
+    int editing_act;
 
     void cancel_changes();
     void save_changes();
@@ -36,6 +39,11 @@ private:
     void add_activity();
     void delete_activity();
     void edit_activity(QListWidgetItem *item);
+
+signals:
+    void cancelled_changes();
+    void cancelled_activity();
+
 };
 
 #endif // MNGACTIVITY_H

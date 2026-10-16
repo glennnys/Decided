@@ -1,6 +1,5 @@
 #include "mngactivity.h"
 #include "ui_mngactivity.h"
-#include "mngitems.h"
 
 
 MngActivity::MngActivity(QWidget *parent)
@@ -9,10 +8,10 @@ MngActivity::MngActivity(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->save_changes, &QPushButton::clicked, this, &MngActivity::save_changes);
-    connect(ui->cancel_changes, &QPushButton::clicked, this, &MngActivity::cancel_changes);
+    connect(ui->save_btn, &QPushButton::clicked, this, &MngActivity::save_changes);
+    connect(ui->cancel_btn, &QPushButton::clicked, this, &MngActivity::cancel_changes);
 
-    auto *itemWidget = new MngItems;
+    itemWidget = new MngItems;
     setContentWidget(itemWidget);
 
     editing_act = -1;
@@ -38,6 +37,11 @@ void MngActivity::setContentWidget(QWidget *widget)
 {
     QLayout *layout = ui->placeholder->layout();
 
+    if (!layout) {
+        qDebug() << "Placeholder has no layout!";
+        return;
+    }
+
     if (current_widget) {
         layout->removeWidget(current_widget);
         delete current_widget;
@@ -52,11 +56,15 @@ void MngActivity::cancel_changes()
 {
     new_act_list = cur_act_list;
 
+    itemWidget->cancel_changes();
+
     set_act_display();
 }
 
 void MngActivity::save_changes()
 {
+    itemWidget->save_changes();
+
     QSqlDatabase activityDb = QSqlDatabase::database("activity");
     QSqlQuery query(activityDb);
 
@@ -239,14 +247,14 @@ void MngActivity::cancel_activity()
     ui->act_dur_entry->setTime(QTime(0, 0));
     ui->act_min_p_spin->setValue(1);
     ui->act_max_p_spin->setValue(4);
-    selected_items.clear();
+    itemWidget->selected_items.clear();
 
     ui->confirm_act_btn->setText("Add activity");
 
     editing_act = -1;
 
+    itemWidget->cancel_item();
     set_act_display();
-    set_item_display();
 }
 
 void MngActivity::add_activity()
@@ -257,7 +265,7 @@ void MngActivity::add_activity()
     const int dur = ui->act_dur_entry->time().hour()*60 + ui->act_dur_entry->time().minute();
     const int min = ui->act_min_p_slider->value();
     const int max = ui->act_max_p_spin->value();
-    const QSet<int> reqs = selected_items;
+    const QSet<int> reqs = itemWidget->selected_items;
 
     if (id>0)
     {
@@ -301,6 +309,7 @@ void MngActivity::add_activity()
 
     ui->act_list->sortItems();
 
+    itemWidget->cancel_item();
     cancel_activity();
 }
 
@@ -312,6 +321,7 @@ void MngActivity::delete_activity()
         qWarning() << "Couldn't remove item";
     }
 
+    itemWidget->cancel_item();
     cancel_activity();
 }
 
@@ -329,9 +339,9 @@ void MngActivity::edit_activity(QListWidgetItem *list_item)
     ui->act_min_p_spin->setValue(activity.min_players);
     ui->act_max_p_spin->setValue(activity.max_players);
 
-    selected_items = activity.items;
+    itemWidget->selected_items = activity.items;
 
     editing_act = act_id;
 
-    set_item_display();
+    itemWidget->set_item_display();
 }

@@ -20,15 +20,11 @@ qt_add_executable(Decided
     activitypage.h activitypage.cpp activitypage.ui
 
     genactivity.h genactivity.cpp genactivity.ui
+    mngitems.h mngitems.cpp mngitems.ui
     mngactivity.h mngactivity.cpp mngactivity.ui
     mainsettings.h mainsettings.cpp mainsettings.ui
+
     utils.h utils.cpp
-
-
-    mngitems.h mngitems.cpp mngitems.ui
-
-
-
 
 )
 

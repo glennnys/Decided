@@ -7,6 +7,9 @@ MngItems::MngItems(QWidget *parent)
 {
     ui->setupUi(this);
 
+    connect(ui->save_btn, &QPushButton::clicked, this, &MngItems::save_changes);
+    connect(ui->cancel_btn, &QPushButton::clicked, this, &MngItems::cancel_changes);
+
     editing_item = -1;
     connect(ui->search_item_entry, &QLineEdit::textChanged, this, &MngItems::set_item_display);
     connect(ui->confirm_item_btn, &QPushButton::clicked, this, &MngItems::add_item);
@@ -98,6 +101,8 @@ void MngItems::save_changes()
         }
     }
 
+
+
     activityDb.commit(); // commit all inserts at once
 
     cur_item_list = new_item_list;
@@ -148,6 +153,8 @@ void MngItems::cancel_item()
     ui->confirm_item_btn->setText("Add item");
 
     editing_item = -1;
+
+    set_item_display();
 }
 
 void MngItems::add_item()

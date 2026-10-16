@@ -15,7 +15,7 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <property name="spacing">
-    <number>0</number>
+    <number>6</number>
    </property>
    <property name="leftMargin">
     <number>0</number>
@@ -47,7 +47,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="cancel_changes">
+        <widget class="QPushButton" name="cancel_btn">
          <property name="font">
           <font>
            <pointsize>16</pointsize>
@@ -59,7 +59,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="save_changes">
+        <widget class="QPushButton" name="save_btn">
          <property name="font">
           <font>
            <pointsize>16</pointsize>
@@ -468,7 +468,25 @@
     </widget>
    </item>
    <item>
-    <widget class="QWidget" name="placeholder" native="true"/>
+    <widget class="QWidget" name="placeholder" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
+       <number>0</number>
+      </property>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
