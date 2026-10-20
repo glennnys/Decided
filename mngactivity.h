@@ -6,6 +6,7 @@
 #include <qlistwidget.h>
 #include "utils.h"
 #include "mngitems.h"
+#include "mngactivitytags.h"
 
 namespace Ui {
 class MngActivity;
@@ -22,9 +23,12 @@ public:
 private:
     Ui::MngActivity *ui;
     MngItems *itemWidget;
+    MngActivityTags *tagWidget;
 
     QWidget *current_widget = nullptr;
-    void setContentWidget(QWidget *widget);
+    void setContentWidget(int page);
+    bool editor_open = false;
+    void change_editor(bool opening);
 
     QHash<int, Activity> cur_act_list, new_act_list;
     int editing_act;

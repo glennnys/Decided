@@ -32,7 +32,6 @@ public:
 private:
     Ui::MngItems *ui;
 
-
     void load_items();
     void add_item();
     void delete_item();

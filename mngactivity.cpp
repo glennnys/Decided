@@ -1,5 +1,6 @@
 #include "mngactivity.h"
 #include "ui_mngactivity.h"
+#include <QPropertyAnimation>
 
 
 MngActivity::MngActivity(QWidget *parent)
@@ -12,7 +13,12 @@ MngActivity::MngActivity(QWidget *parent)
     connect(ui->cancel_btn, &QPushButton::clicked, this, &MngActivity::cancel_changes);
 
     itemWidget = new MngItems;
-    setContentWidget(itemWidget);
+    tagWidget = new MngActivityTags;
+    ui->placeholder->addWidget(itemWidget);
+    ui->placeholder->addWidget(tagWidget);
+
+    connect(ui->edit_item_btn, &QPushButton::clicked, this, [this] {setContentWidget(0);});
+    connect(ui->edit_tags_btn, &QPushButton::clicked, this, [this] {setContentWidget(1);});
 
     editing_act = -1;
     connect(ui->search_act_entry, &QLineEdit::textChanged, this, &MngActivity::set_act_display);
@@ -33,22 +39,38 @@ MngActivity::~MngActivity()
     delete ui;
 }
 
-void MngActivity::setContentWidget(QWidget *widget)
+void MngActivity::setContentWidget(int page)
 {
-    QLayout *layout = ui->placeholder->layout();
+    auto *stack = ui->placeholder;
+    if (page > stack->count()) return;
 
-    if (!layout) {
-        qDebug() << "Placeholder has no layout!";
+    const int current_page = stack->currentIndex();
+
+    stack->setCurrentIndex(page);
+
+    bool opening = stack->width() == 0 || current_page != page;
+    change_editor(opening);
+}
+
+void MngActivity::change_editor(bool opening)
+{
+    if (editor_open == opening)
         return;
-    }
 
-    if (current_widget) {
-        layout->removeWidget(current_widget);
-        delete current_widget;
-    }
+    const int editorWidth = 1000;
+    const int start = ui->placeholder->width() * !opening;
+    const int end = editorWidth * opening;
 
-    current_widget = widget;
-    layout->addWidget(current_widget);
+    auto *animation = new QPropertyAnimation(ui->placeholder, "maximumWidth", this);
+
+    animation->setDuration(250);
+    animation->setStartValue(start);
+    animation->setEndValue(end);
+    animation->setEasingCurve(QEasingCurve::OutCubic);
+
+    animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+    editor_open = opening;
 }
 
 //General section
@@ -267,11 +289,20 @@ void MngActivity::add_activity()
     const int max = ui->act_max_p_spin->value();
     const QSet<int> reqs = itemWidget->selected_items;
 
+    if (name == ""){
+        QMessageBox::warning(
+            this,
+            tr("Decided"),
+            tr("Write \"Doing nothing\" instead of leaving the activity name blank next time.") );
+        return;
+    }
+
     if (id>0)
     {
         auto act = new_act_list.find(id);
         if (act == new_act_list.end())
             return;
+
 
         QListWidgetItem *list_act = ui->act_list->findItems(act->name, Qt::MatchExactly)[0];
 
@@ -289,10 +320,12 @@ void MngActivity::add_activity()
         }
     } else {
         if (find_same_name(name, new_act_list) != -1){
+            QString response = "Unable to add activity. This town ain't big enough for two " + name + "'s.";
+
             QMessageBox::warning(
                 this,
-                tr("Simealplified"),
-                tr("Unable to add activity. Another activity with that name already exists.") );
+                tr("Decided"),
+                tr(response.toLocal8Bit().data()) );
             return;
         }
 

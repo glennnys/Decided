@@ -25,6 +25,8 @@ qt_add_executable(Decided
     mainsettings.h mainsettings.cpp mainsettings.ui
 
     utils.h utils.cpp
+    mngactivitytags.h mngactivitytags.cpp mngactivitytags.ui
+    tag.h tag.cpp tag.ui
 
 )
 

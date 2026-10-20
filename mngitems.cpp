@@ -7,13 +7,10 @@ MngItems::MngItems(QWidget *parent)
 {
     ui->setupUi(this);
 
-    connect(ui->save_btn, &QPushButton::clicked, this, &MngItems::save_changes);
-    connect(ui->cancel_btn, &QPushButton::clicked, this, &MngItems::cancel_changes);
-
     editing_item = -1;
     connect(ui->search_item_entry, &QLineEdit::textChanged, this, &MngItems::set_item_display);
-    connect(ui->confirm_item_btn, &QPushButton::clicked, this, &MngItems::add_item);
-    connect(ui->cancel_item_btn, &QPushButton::clicked, this, &MngItems::cancel_item);
+    connect(ui->confirm_btnbox, &QDialogButtonBox::accepted, this, &MngItems::add_item);
+    connect(ui->confirm_btnbox, &QDialogButtonBox::rejected, this, &MngItems::cancel_item);
     connect(ui->delete_item_btn, &QPushButton::clicked, this, &MngItems::delete_item);
     connect(ui->existing_item_list, &QListWidget::itemClicked, this, &MngItems::edit_item);
     connect(ui->selected_item_list, &QListWidget::itemClicked, this, &MngItems::edit_item);
@@ -102,7 +99,6 @@ void MngItems::save_changes()
     }
 
 
-
     activityDb.commit(); // commit all inserts at once
 
     cur_item_list = new_item_list;
@@ -150,7 +146,7 @@ void MngItems::cancel_item()
     ui->item_name_entry->clear();
     ui->item_desc_entry->clear();
 
-    ui->confirm_item_btn->setText("Add item");
+    ui->item_lbl->setText("Add item");
 
     editing_item = -1;
 
@@ -162,6 +158,14 @@ void MngItems::add_item()
     const int id = editing_item;
     const QString name = ui->item_name_entry->text();
     const QString desc = ui->item_desc_entry->document()->toPlainText();
+
+    if (name == ""){
+        QMessageBox::warning(
+            this,
+            tr("Decided"),
+            tr("An item without a name cannot exist.") );
+        return;
+    }
 
     if (id>0)
     {
@@ -189,8 +193,8 @@ void MngItems::add_item()
         if (find_same_name(name, new_item_list) != -1){
             QMessageBox::warning(
                 this,
-                tr("Simealplified"),
-                tr("Unable to add item. Another item with that name already exists.") );
+                tr("Decided"),
+                tr("Unable to add item. Another item with that name already exists. And we don't want any posers, eh?") );
             return;
         }
 
@@ -225,7 +229,7 @@ void MngItems::edit_item(QListWidgetItem *list_item)
     int item_id = find_same_name(list_item->text(), new_item_list);
 
     if (item_id < 0) return;
-    ui->confirm_item_btn->setText("Edit item");
+    ui->item_lbl->setText("Edit item");
 
     ui->item_name_entry->setText(new_item_list[item_id].name);
     ui->item_desc_entry->setText(new_item_list[item_id].description);
