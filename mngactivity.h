@@ -6,7 +6,8 @@
 #include <qlistwidget.h>
 #include "utils.h"
 #include "mngitems.h"
-#include "mngactivitytags.h"
+#include "mngtags.h"
+#include "tag.h"
 
 namespace Ui {
 class MngActivity;
@@ -23,7 +24,8 @@ public:
 private:
     Ui::MngActivity *ui;
     MngItems *itemWidget;
-    MngActivityTags *tagWidget;
+    MngTags *tagWidget;
+    FlowLayout *flowLayout;
 
     QWidget *current_widget = nullptr;
     void setContentWidget(int page);
@@ -44,6 +46,7 @@ private:
     void delete_activity();
     void edit_activity(QListWidgetItem *item);
 
+    void add_tags(QHash<int, QString> tags);
 signals:
     void cancelled_changes();
     void cancelled_activity();

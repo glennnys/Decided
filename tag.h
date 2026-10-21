@@ -12,11 +12,14 @@ class Tag : public QWidget
     Q_OBJECT
 
 public:
-    explicit Tag(QWidget *parent = nullptr);
+    explicit Tag(QWidget *parent = nullptr, QString name = "");
     ~Tag();
 
 private:
     Ui::Tag *ui;
-};
 
+signals:
+    void tag_removed(Tag *tag);
+
+};
 #endif // TAG_H

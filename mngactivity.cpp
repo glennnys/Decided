@@ -13,12 +13,17 @@ MngActivity::MngActivity(QWidget *parent)
     connect(ui->cancel_btn, &QPushButton::clicked, this, &MngActivity::cancel_changes);
 
     itemWidget = new MngItems;
-    tagWidget = new MngActivityTags;
+    tagWidget = new MngTags;
     ui->placeholder->addWidget(itemWidget);
     ui->placeholder->addWidget(tagWidget);
+    connect(tagWidget, &MngTags::tags_selected, this, &MngActivity::add_tags);
+    connect(tagWidget, &MngTags::tags_selected, this, [this] {setContentWidget(1);});
 
     connect(ui->edit_item_btn, &QPushButton::clicked, this, [this] {setContentWidget(0);});
     connect(ui->edit_tags_btn, &QPushButton::clicked, this, [this] {setContentWidget(1);});
+
+    flowLayout = new FlowLayout;
+    ui->tag_holder->setLayout(flowLayout);
 
     editing_act = -1;
     connect(ui->search_act_entry, &QLineEdit::textChanged, this, &MngActivity::set_act_display);
@@ -79,6 +84,7 @@ void MngActivity::cancel_changes()
     new_act_list = cur_act_list;
 
     itemWidget->cancel_changes();
+    tagWidget->cancel_changes();
 
     set_act_display();
 }
@@ -86,6 +92,7 @@ void MngActivity::cancel_changes()
 void MngActivity::save_changes()
 {
     itemWidget->save_changes();
+    tagWidget->save_changes();
 
     QSqlDatabase activityDb = QSqlDatabase::database("activity");
     QSqlQuery query(activityDb);
@@ -207,6 +214,23 @@ void MngActivity::save_changes()
     cur_act_list = new_act_list;
 }
 
+void MngActivity::add_tags(QHash<int, QString> tags)
+{
+    for (auto [id, name] : tags.asKeyValueRange())
+    {
+        Tag *tag_widget = new Tag(this, name);
+        flowLayout->addWidget(tag_widget);
+        connect(tag_widget, &Tag::tag_removed, this, [this, tag_widget] {
+            flowLayout->removeWidget(tag_widget);
+            tag_widget->hide();
+            tag_widget->deleteLater();
+
+            flowLayout->invalidate();
+            flowLayout->activate();
+        });
+    }
+}
+
 
 void MngActivity::set_act_display()
 {
@@ -276,6 +300,7 @@ void MngActivity::cancel_activity()
     editing_act = -1;
 
     itemWidget->cancel_item();
+    tagWidget->cancel_tag();
     set_act_display();
 }
 
@@ -343,18 +368,23 @@ void MngActivity::add_activity()
     ui->act_list->sortItems();
 
     itemWidget->cancel_item();
+    tagWidget->cancel_tag();
     cancel_activity();
 }
 
 void MngActivity::delete_activity()
 {
-    if (new_act_list.remove(find_same_name(ui->act_list->currentItem()->text(), new_act_list))) {
+    auto item = ui->act_list->currentItem();
+    if (!item) return;
+
+    if (new_act_list.remove(find_same_name(item->text(), new_act_list))) {
         ui->act_list->takeItem(ui->act_list->currentRow());
     } else {
         qWarning() << "Couldn't remove item";
     }
 
     itemWidget->cancel_item();
+    tagWidget->cancel_tag();
     cancel_activity();
 }
 
@@ -377,4 +407,5 @@ void MngActivity::edit_activity(QListWidgetItem *list_item)
     editing_act = act_id;
 
     itemWidget->set_item_display();
+    tagWidget->set_tag_display();
 }

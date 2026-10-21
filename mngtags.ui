@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>MngActivityTags</class>
- <widget class="QWidget" name="MngActivityTags">
+ <class>MngTags</class>
+ <widget class="QWidget" name="MngTags">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -71,19 +71,6 @@
        </property>
       </widget>
      </item>
-     <item>
-      <widget class="QPushButton" name="delete_tag_btn">
-       <property name="toolTip">
-        <string>Delete selected tags</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::EditDelete"/>
-       </property>
-      </widget>
-     </item>
     </layout>
    </item>
    <item>
@@ -96,7 +83,7 @@
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <item>
-      <widget class="QLabel" name="label">
+      <widget class="QLabel" name="tag_label">
        <property name="text">
         <string>New Tag</string>
        </property>

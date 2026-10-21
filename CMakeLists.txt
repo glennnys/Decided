@@ -7,6 +7,8 @@ find_package(Qt6 COMPONENTS Sql REQUIRED)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+
+
 qt_standard_project_setup()
 
 qt_add_executable(Decided
@@ -25,9 +27,8 @@ qt_add_executable(Decided
     mainsettings.h mainsettings.cpp mainsettings.ui
 
     utils.h utils.cpp
-    mngactivitytags.h mngactivitytags.cpp mngactivitytags.ui
+    mngtags.h mngtags.cpp mngtags.ui
     tag.h tag.cpp tag.ui
-
 )
 
 target_link_libraries(Decided

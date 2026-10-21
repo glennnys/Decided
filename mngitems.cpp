@@ -98,7 +98,6 @@ void MngItems::save_changes()
         }
     }
 
-
     activityDb.commit(); // commit all inserts at once
 
     cur_item_list = new_item_list;
@@ -215,7 +214,9 @@ void MngItems::add_item()
 
 void MngItems::delete_item()
 {
-    if (new_item_list.remove(find_same_name(ui->existing_item_list->currentItem()->text(), new_item_list))) {
+    auto item = ui->existing_item_list->currentItem();
+    if (!item) return;
+    if (new_item_list.remove(find_same_name(item->text(), new_item_list))) {
         ui->existing_item_list->takeItem(ui->existing_item_list->currentRow());
     } else {
         qWarning() << "Couldn't remove item";

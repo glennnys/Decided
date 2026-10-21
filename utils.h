@@ -33,4 +33,5 @@ int find_same_name(const QString& name, const QHash<int, T>& list);
 
 int generate_id(const QList<int>& old_ids, const QList<int>& new_ids);
 
+
 #endif // UTILS_H
