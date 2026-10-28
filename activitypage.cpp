@@ -16,6 +16,9 @@ ActivityPage::ActivityPage(QWidget *parent)
     ui->tabs->addTab(generator, "Suggest activity");
     ui->tabs->addTab(manager, "Manage activities");
 
+    connect(manager, &MngActivity::finalizeActivities, generator, &GenActivity::setData);
+
+    manager->initialize();
 }
 
 ActivityPage::~ActivityPage()

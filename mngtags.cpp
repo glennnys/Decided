@@ -3,13 +3,14 @@
 #include "utils.h"
 #include "tag.h"
 
-MngTags::MngTags(QWidget *parent)
+MngTags::MngTags(QWidget *parent, bool selectOnly)
     : QWidget(parent)
     , ui(new Ui::MngTags)
 {
     ui->setupUi(this);
 
     editing_tag = -1;
+    editable = !selectOnly;
     connect(ui->search_edit, &QLineEdit::textChanged, this, &MngTags::set_tag_display);
     connect(ui->add_tag_btn, &QPushButton::clicked, this, &MngTags::add_tag);
     connect(ui->deleteBtn, &QPushButton::clicked, this, &MngTags::toggleDelete);
@@ -22,6 +23,13 @@ MngTags::MngTags(QWidget *parent)
     toggleDelete();
     load_tags();
     set_tag_display();
+
+    if (selectOnly)
+    {
+        ui->deleteBtn->hide();
+        ui->deleteBtn->deleteLater();
+        clearLayout(ui->addTagLayout->layout());
+    }
 }
 
 MngTags::~MngTags()
@@ -123,6 +131,8 @@ void MngTags::cancel_tags()
 {
     selectedTags = initialTags;
     set_tag_display();
+
+    emit cancelled();
 }
 
 void MngTags::set_tag_display()
@@ -161,6 +171,7 @@ void MngTags::load_tags()
 
 void MngTags::cancel_tag()
 {
+    if (!editable) return;
     ui->tag_entry->clear();
 
     ui->tag_label->setText("New tag");
@@ -173,6 +184,7 @@ void MngTags::cancel_tag()
 
 void MngTags::add_tag()
 {
+    if (!editable) return;
     const int id = editing_tag;
     const QString name = ui->tag_entry->text();
 
@@ -227,6 +239,7 @@ void MngTags::add_tag()
 
 void MngTags::delete_tag(QListWidgetItem *item)
 {
+    if (!editable) return;
     QMessageBox msgBox(this);
     msgBox.setIcon(QMessageBox::Warning);
     msgBox.setText("Are you sure you want to delete the \"" + item->text() + "\" tag?");
@@ -253,6 +266,7 @@ void MngTags::delete_tag(QListWidgetItem *item)
 
 void MngTags::toggleDelete()
 {
+    if (!editable) return;
     if (ui->deleteBtn->isChecked())
     {
         disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
@@ -271,6 +285,7 @@ void MngTags::toggleDelete()
 
 void MngTags::edit_tag(QListWidgetItem *list_item)
 {
+    if (!editable) return;
     int item_id = new_tag_list.key(list_item->text());
 
     if (item_id < 0) return;
@@ -295,7 +310,6 @@ void MngTags::removeTag(int id)
     selectedTags.remove(id);
     set_tag_display();
 }
-
 
 // Layout for adding tags somewhere
 FlowLayout::FlowLayout(QWidget *parent, int margin, int hSpacing, int vSpacing)

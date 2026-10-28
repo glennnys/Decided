@@ -9,6 +9,7 @@ MngItems::MngItems(QWidget *parent)
 
     editing_item = -1;
     connect(ui->search_item_entry, &QLineEdit::textChanged, this, &MngItems::set_item_display);
+    connect(ui->search_item_refresh, &QPushButton::clicked, this, [this] {ui->search_item_entry->clear();});
     connect(ui->resetItemBtn, &QPushButton::clicked, this, &MngItems::cancel_item);
     connect(ui->createItemBtn, &QPushButton::clicked, this, &MngItems::add_item);
     connect(ui->delete_item_btn, &QPushButton::clicked, this, &MngItems::delete_item);

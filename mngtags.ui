@@ -94,7 +94,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="addTagLayout">
      <item>
       <widget class="QLabel" name="tag_label">
        <property name="text">

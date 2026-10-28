@@ -7,6 +7,7 @@
 #include "utils.h"
 #include "mngitems.h"
 #include "mngtags.h"
+#include "tag.h"
 
 namespace Ui {
 class MngActivity;
@@ -20,6 +21,7 @@ public:
     explicit MngActivity(QWidget *parent = nullptr);
     ~MngActivity();
 
+    void initialize();
 private:
     Ui::MngActivity *ui;
     MngItems *itemWidget;
@@ -46,9 +48,12 @@ private:
     void edit_activity(QListWidgetItem *item);
 
     void set_tags(QHash<int, QString> tags);
+
 signals:
     void cancelled_changes();
     void cancelled_activity();
+
+    void finalizeActivities(QHash<int, Activity> activities, QHash<int, Item> items, QHash<int, QString> tags);
 
 };
 

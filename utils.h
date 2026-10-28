@@ -30,8 +30,9 @@ struct Activity{
 
 template <typename T>
 int find_same_name(const QString& name, const QHash<int, T>& list);
-
 int generate_id(const QList<int>& old_ids, const QList<int>& new_ids);
+
+void clearLayout(QLayout *layout);
 
 
 #endif // UTILS_H

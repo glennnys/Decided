@@ -1,3 +1,4 @@
+#include <QLayout>
 #include "utils.h"
 
 template <typename T>
@@ -26,4 +27,23 @@ int generate_id(const QList<int>& old_ids, const QList<int>& new_ids)
     all_ids.unite(QSet<int>(new_ids.begin(), new_ids.end()));
 
     return *std::max_element(all_ids.begin(), all_ids.end()) + 1;
+}
+
+void clearLayout(QLayout *layout)
+{
+    if (!layout)
+        return;
+
+    while (QLayoutItem *item = layout->takeAt(0)) {
+        if (QWidget *widget = item->widget()) {
+            delete widget;
+        } else if (QLayout *childLayout = item->layout()) {
+            clearLayout(childLayout);
+            delete childLayout;
+        }
+
+        delete item;
+    }
+
+    delete layout;
 }

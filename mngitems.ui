@@ -27,6 +27,46 @@
     <number>0</number>
    </property>
    <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLineEdit" name="search_item_entry">
+       <property name="toolTip">
+        <string>Search item list</string>
+       </property>
+       <property name="placeholderText">
+        <string>Search items...</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="search_item_refresh">
+       <property name="toolTip">
+        <string>Reset search string</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="delete_item_btn">
+       <property name="toolTip">
+        <string>Delete selected item</string>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="icon">
+        <iconset theme="QIcon::ThemeIcon::EditDelete"/>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -44,46 +84,6 @@
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
-         <item>
-          <widget class="QLineEdit" name="search_item_entry">
-           <property name="toolTip">
-            <string>Search item list</string>
-           </property>
-           <property name="placeholderText">
-            <string>Search...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="search_item_refresh">
-           <property name="toolTip">
-            <string>Reset search string</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="delete_item_btn">
-           <property name="toolTip">
-            <string>Delete selected item</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::EditDelete"/>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <widget class="QListWidget" name="existing_item_list"/>
@@ -180,33 +180,6 @@
           <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
-       </item>
-       <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_9">
-         <item>
-          <widget class="QLineEdit" name="search_req_entry">
-           <property name="toolTip">
-            <string>search activity requirements</string>
-           </property>
-           <property name="placeholderText">
-            <string>Search...</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="search_req_refresh">
-           <property name="toolTip">
-            <string>Reset activity search string</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
-           </property>
-          </widget>
-         </item>
-        </layout>
        </item>
        <item>
         <widget class="QListWidget" name="selected_item_list"/>

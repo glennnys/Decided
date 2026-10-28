@@ -32,6 +32,7 @@ MngActivity::MngActivity(QWidget *parent)
 
     editing_act = -1;
     connect(ui->search_act_entry, &QLineEdit::textChanged, this, &MngActivity::set_act_display);
+    connect(ui->search_act_refresh, &QPushButton::clicked, this, [this] {ui->search_act_entry->clear();});
     connect(ui->confirm_act_btn, &QPushButton::clicked, this, &MngActivity::add_activity);
     connect(ui->cancel_act_btn, &QPushButton::clicked, this, &MngActivity::cancel_activity);
     connect(ui->delete_act_btn, &QPushButton::clicked, this, &MngActivity::delete_activity);
@@ -47,6 +48,11 @@ MngActivity::MngActivity(QWidget *parent)
 MngActivity::~MngActivity()
 {
     delete ui;
+}
+
+void MngActivity::initialize()
+{
+    emit finalizeActivities(cur_act_list, itemWidget->cur_item_list, tagWidget->cur_tag_list);
 }
 
 void MngActivity::setContentWidget(int page)
@@ -271,6 +277,8 @@ void MngActivity::save_changes()
     QMessageBox msgBox(this);
     msgBox.setText("Changes have been saved.");
     msgBox.exec();
+
+    emit finalizeActivities(cur_act_list, itemWidget->cur_item_list, tagWidget->cur_tag_list);
 }
 
 void MngActivity::set_tags(QHash<int, QString> tags)

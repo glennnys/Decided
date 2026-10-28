@@ -16,12 +16,13 @@ class MngTags : public QWidget
     Q_OBJECT
 
 public:
-    explicit MngTags(QWidget *parent = nullptr);
+    explicit MngTags(QWidget *parent = nullptr, bool selectOnly = false);
     ~MngTags();
 
     QHash<int, QString> cur_tag_list, new_tag_list;
     QSet<int> initialTags, selectedTags;
     int editing_tag;
+    bool editable;
 
     void cancel_changes();
     void save_changes();
@@ -45,6 +46,7 @@ private:
     void cancel_tags();
 signals:
     void tags_selected(QHash<int, QString> tags);
+    void cancelled();
 };
 
 class FlowLayout : public QLayout
