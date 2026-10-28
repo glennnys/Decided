@@ -1,6 +1,7 @@
 #include "mngtags.h"
 #include "ui_mngtags.h"
 #include "utils.h"
+#include "tag.h"
 
 MngTags::MngTags(QWidget *parent)
     : QWidget(parent)
@@ -11,11 +12,14 @@ MngTags::MngTags(QWidget *parent)
     editing_tag = -1;
     connect(ui->search_edit, &QLineEdit::textChanged, this, &MngTags::set_tag_display);
     connect(ui->add_tag_btn, &QPushButton::clicked, this, &MngTags::add_tag);
-    connect(ui->tag_btn_box, &QDialogButtonBox::rejected, this, &MngTags::cancel_tag);
-    connect(ui->tag_btn_box, &QDialogButtonBox::accepted, this, &MngTags::confirm_tags);
-    connect(ui->tag_list, &QListWidget::itemDoubleClicked, this, &MngTags::delete_tag);
-    connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
+    connect(ui->deleteBtn, &QPushButton::clicked, this, &MngTags::toggleDelete);
+    connect(ui->tag_entry, &QLineEdit::returnPressed, this, &MngTags::add_tag);
+    connect(ui->resetTagBtn, &QPushButton::clicked, this, &MngTags::cancel_tag);
+    connect(ui->confirmBtnBox, &QDialogButtonBox::accepted, this, &MngTags::confirm_tags);
+    connect(ui->confirmBtnBox, &QDialogButtonBox::rejected, this, &MngTags::cancel_tags);
 
+    ui->deleteBtn->setChecked(false);
+    toggleDelete();
     load_tags();
     set_tag_display();
 }
@@ -78,8 +82,12 @@ void MngTags::save_changes()
         }
     }
 
-    query.prepare("INSERT OR REPLACE INTO Tags (id, name)"
-                  "VALUES (:id, :name)");
+    query.prepare(
+        "INSERT INTO Tags (id, name) "
+        "VALUES (:id, :name) "
+        "ON CONFLICT(id) DO UPDATE SET "
+        "name = excluded.name"
+        );
 
     for (const auto &id : std::as_const(toAdd)) {
         query.bindValue(":id", id);
@@ -111,6 +119,12 @@ void MngTags::confirm_tags()
     emit tags_selected(tags);
 }
 
+void MngTags::cancel_tags()
+{
+    selectedTags = initialTags;
+    set_tag_display();
+}
+
 void MngTags::set_tag_display()
 {
     ui->tag_list->clear();
@@ -121,6 +135,7 @@ void MngTags::set_tag_display()
         {
             QListWidgetItem *widgetItem = new QListWidgetItem(tag);
             ui->tag_list->addItem(widgetItem);
+            if (selectedTags.contains(id)) widgetItem->setSelected(true);
         }
     }
 
@@ -212,14 +227,46 @@ void MngTags::add_tag()
 
 void MngTags::delete_tag(QListWidgetItem *item)
 {
-    if (!item) return;
-    if (new_tag_list.remove(new_tag_list.key(item->text()))) {
-        ui->tag_list->removeItemWidget(item);
-    } else {
-        qWarning() << "Couldn't remove item";
-    }
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText("Are you sure you want to delete the \"" + item->text() + "\" tag?");
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    int ret = msgBox.exec();
 
-    cancel_tag();
+    switch (ret) {
+    case QMessageBox::Save:
+        if (new_tag_list.remove(new_tag_list.key(item->text()))) {
+            ui->tag_list->removeItemWidget(item);
+        } else {
+            qWarning() << "Couldn't remove item";
+        }
+
+        cancel_tag();
+        return;
+    case QMessageBox::Cancel:
+        return;
+    default:
+        break;
+    }
+}
+
+void MngTags::toggleDelete()
+{
+    if (ui->deleteBtn->isChecked())
+    {
+        disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
+        connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::delete_tag);
+        ui->deleteBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FormatJustifyFill));
+        ui->tag_list->setSelectionMode(QAbstractItemView::NoSelection);
+        return;
+    } else {
+        disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::delete_tag);
+        connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
+        ui->deleteBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
+        ui->tag_list->setSelectionMode(QAbstractItemView::MultiSelection);
+        return;
+    }
 }
 
 void MngTags::edit_tag(QListWidgetItem *list_item)
@@ -233,6 +280,20 @@ void MngTags::edit_tag(QListWidgetItem *list_item)
     ui->tag_entry->setText(list_item->text());
 
     editing_tag = item_id;
+}
+
+QHash<int, QString> MngTags::getTags(){
+    QHash<int, QString> tags;
+    for (auto id : selectedTags) {
+        tags.insert(id, new_tag_list.find(id).value());
+    }
+    return tags;
+}
+
+void MngTags::removeTag(int id)
+{
+    selectedTags.remove(id);
+    set_tag_display();
 }
 
 
@@ -251,14 +312,38 @@ FlowLayout::FlowLayout(int margin, int hSpacing, int vSpacing)
 
 FlowLayout::~FlowLayout()
 {
-    QLayoutItem *item;
-    while ((item = takeAt(0)))
-        delete item;
+    clear();
 }
 
 void FlowLayout::addItem(QLayoutItem *item)
 {
     itemList.append(item);
+}
+
+void FlowLayout::clear()
+{
+    while (QLayoutItem *item = takeAt(0)) {
+        if (QWidget *widget = item->widget())
+            widget->deleteLater();
+
+        delete item;
+    }
+
+    invalidate();
+    activate();
+}
+
+QSet<int> FlowLayout::getTags()
+{
+    QSet<int> tags;
+    for (auto item : itemList)
+    {
+        if (auto *tag = qobject_cast<Tag *>(item->widget())) {
+            tags.insert(tag->tagId);
+        }
+    }
+
+    return tags;
 }
 
 int FlowLayout::horizontalSpacing() const

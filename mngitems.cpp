@@ -9,8 +9,8 @@ MngItems::MngItems(QWidget *parent)
 
     editing_item = -1;
     connect(ui->search_item_entry, &QLineEdit::textChanged, this, &MngItems::set_item_display);
-    connect(ui->confirm_btnbox, &QDialogButtonBox::accepted, this, &MngItems::add_item);
-    connect(ui->confirm_btnbox, &QDialogButtonBox::rejected, this, &MngItems::cancel_item);
+    connect(ui->resetItemBtn, &QPushButton::clicked, this, &MngItems::cancel_item);
+    connect(ui->createItemBtn, &QPushButton::clicked, this, &MngItems::add_item);
     connect(ui->delete_item_btn, &QPushButton::clicked, this, &MngItems::delete_item);
     connect(ui->existing_item_list, &QListWidget::itemClicked, this, &MngItems::edit_item);
     connect(ui->selected_item_list, &QListWidget::itemClicked, this, &MngItems::edit_item);
@@ -20,6 +20,8 @@ MngItems::MngItems(QWidget *parent)
     connect(ui->add_item_btn,    &QPushButton::clicked, this, &MngItems::select_item);
     connect(ui->remove_item_btn, &QPushButton::clicked, this, &MngItems::deselect_item);
     connect(ui->reset_item_list, &QPushButton::clicked, this, &MngItems::reset_selection);
+    connect(ui->confirmBtnBox, &QDialogButtonBox::accepted, this, &MngItems::confirm_items);
+    connect(ui->confirmBtnBox, &QDialogButtonBox::rejected, this, &MngItems::cancel_items);
 
     load_items();
     set_item_display();
@@ -83,8 +85,13 @@ void MngItems::save_changes()
         }
     }
 
-    query.prepare("INSERT OR REPLACE INTO Items (id, name, description)"
-                  "VALUES (:id, :name, :desc)");
+    query.prepare(
+        "INSERT INTO Items (id, name, description) "
+        "VALUES (:id, :name, :desc) "
+        "ON CONFLICT(id) DO UPDATE SET "
+        "name = excluded.name, "
+        "description = excluded.description"
+        );
 
     for (const auto &id : std::as_const(toAdd)) {
         query.bindValue(":id", id);
@@ -101,6 +108,17 @@ void MngItems::save_changes()
     activityDb.commit(); // commit all inserts at once
 
     cur_item_list = new_item_list;
+}
+
+void MngItems::confirm_items()
+{
+    emit items_selected(selected_items);
+}
+
+void MngItems::cancel_items()
+{
+    selected_items = initial_items;
+    set_item_display();
 }
 
 void MngItems::set_item_display()
@@ -145,7 +163,8 @@ void MngItems::cancel_item()
     ui->item_name_entry->clear();
     ui->item_desc_entry->clear();
 
-    ui->item_lbl->setText("Add item");
+    ui->item_lbl->setText("New item");
+    ui->createItemBtn->setText("Add");
 
     editing_item = -1;
 
@@ -216,13 +235,29 @@ void MngItems::delete_item()
 {
     auto item = ui->existing_item_list->currentItem();
     if (!item) return;
-    if (new_item_list.remove(find_same_name(item->text(), new_item_list))) {
-        ui->existing_item_list->takeItem(ui->existing_item_list->currentRow());
-    } else {
-        qWarning() << "Couldn't remove item";
-    }
 
-    cancel_item();
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText("Are you sure you want to delete \"" + item->text() + "\"?");
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    int ret = msgBox.exec();
+
+    switch (ret) {
+    case QMessageBox::Save:
+        if (new_item_list.remove(find_same_name(item->text(), new_item_list))) {
+            ui->existing_item_list->takeItem(ui->existing_item_list->currentRow());
+        } else {
+            qWarning() << "Couldn't remove item";
+        }
+
+        cancel_item();
+        return;
+    case QMessageBox::Cancel:
+        return;
+    default:
+        break;
+    }
 }
 
 void MngItems::edit_item(QListWidgetItem *list_item)
@@ -231,6 +266,7 @@ void MngItems::edit_item(QListWidgetItem *list_item)
 
     if (item_id < 0) return;
     ui->item_lbl->setText("Edit item");
+    ui->createItemBtn->setText("Edit");
 
     ui->item_name_entry->setText(new_item_list[item_id].name);
     ui->item_desc_entry->setText(new_item_list[item_id].description);

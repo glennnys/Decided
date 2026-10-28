@@ -243,14 +243,35 @@
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="item_name_entry">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="placeholderText">
-        <string>Insert name</string>
-       </property>
-      </widget>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <widget class="QLineEdit" name="item_name_entry">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="placeholderText">
+          <string>Insert name</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="createItemBtn">
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="resetItemBtn">
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_12">
@@ -286,7 +307,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
     </layout>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="confirm_btnbox">
+    <widget class="QDialogButtonBox" name="confirmBtnBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>

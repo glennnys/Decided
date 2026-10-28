@@ -20,7 +20,7 @@ public:
 
     QHash<int, Item> cur_item_list, new_item_list;
     int editing_item;
-    QSet<int> selected_items;
+    QSet<int> initial_items, selected_items;
 
     void cancel_changes();
     void save_changes();
@@ -40,6 +40,11 @@ private:
     void select_item();
     void deselect_item();
     void reset_selection();
+
+    void confirm_items();
+    void cancel_items();
+signals:
+    void items_selected(QSet<int> selected_items);
 };
 
 #endif // MNGITEMS_H

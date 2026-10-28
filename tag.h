@@ -12,8 +12,11 @@ class Tag : public QWidget
     Q_OBJECT
 
 public:
-    explicit Tag(QWidget *parent = nullptr, QString name = "");
+    explicit Tag(QWidget *parent = nullptr, QString name = "", int id = 0);
     ~Tag();
+
+    QString tagName;
+    int tagId;
 
 private:
     Ui::Tag *ui;

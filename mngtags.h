@@ -6,6 +6,7 @@
 #include <QStyle>
 #include <qlistwidget.h>
 
+
 namespace Ui {
 class MngTags;
 }
@@ -19,6 +20,7 @@ public:
     ~MngTags();
 
     QHash<int, QString> cur_tag_list, new_tag_list;
+    QSet<int> initialTags, selectedTags;
     int editing_tag;
 
     void cancel_changes();
@@ -28,15 +30,19 @@ public:
 
     void cancel_tag();
 
+    void setTags(QSet<int> tagIds);
+    void removeTag(int id);
+    QHash<int, QString> getTags();
 private:
     Ui::MngTags *ui;
 
     void load_tags();
     void add_tag();
     void delete_tag(QListWidgetItem *item);
+    void toggleDelete();
     void edit_tag(QListWidgetItem *item);
     void confirm_tags();
-
+    void cancel_tags();
 signals:
     void tags_selected(QHash<int, QString> tags);
 };
@@ -62,6 +68,8 @@ public:
     void setGeometry(const QRect &rect) override;
     QSize sizeHint() const override;
 
+    void clear();
+    QSet<int> getTags();
 private:
     int doLayout(const QRect &rect, bool testOnly) const;
     int smartSpacing(QStyle::PixelMetric pm) const;

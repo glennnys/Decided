@@ -1,6 +1,8 @@
 #include "mngactivity.h"
 #include "ui_mngactivity.h"
+#include "tag.h"
 #include <QPropertyAnimation>
+#include <QShortcut>
 
 
 MngActivity::MngActivity(QWidget *parent)
@@ -9,14 +11,17 @@ MngActivity::MngActivity(QWidget *parent)
 {
     ui->setupUi(this);
 
+    auto shortcut = new QShortcut(QKeySequence(tr("Ctrl+S")), parent);
     connect(ui->save_btn, &QPushButton::clicked, this, &MngActivity::save_changes);
+    connect(shortcut, &QShortcut::activated, this, &MngActivity::save_changes);
     connect(ui->cancel_btn, &QPushButton::clicked, this, &MngActivity::cancel_changes);
 
     itemWidget = new MngItems;
     tagWidget = new MngTags;
     ui->placeholder->addWidget(itemWidget);
     ui->placeholder->addWidget(tagWidget);
-    connect(tagWidget, &MngTags::tags_selected, this, &MngActivity::add_tags);
+    connect(itemWidget, &MngItems::items_selected, this, [this] {setContentWidget(0);});
+    connect(tagWidget, &MngTags::tags_selected, this, &MngActivity::set_tags);
     connect(tagWidget, &MngTags::tags_selected, this, [this] {setContentWidget(1);});
 
     connect(ui->edit_item_btn, &QPushButton::clicked, this, [this] {setContentWidget(0);});
@@ -75,6 +80,8 @@ void MngActivity::change_editor(bool opening)
 
     animation->start(QAbstractAnimation::DeleteWhenStopped);
 
+    ui->editWindowLayout->layout()->setSpacing(6*opening);
+
     editor_open = opening;
 }
 
@@ -87,6 +94,8 @@ void MngActivity::cancel_changes()
     tagWidget->cancel_changes();
 
     set_act_display();
+
+    flowLayout->clear();
 }
 
 void MngActivity::save_changes()
@@ -142,8 +151,17 @@ void MngActivity::save_changes()
         }
     }
 
-    query.prepare("INSERT OR REPLACE INTO Activities (id, name, description, duration, minPlayers, MaxPlayers)"
-                  "VALUES (:id, :name, :desc, :dur, :min, :max)");
+    query.prepare(
+        "INSERT INTO Activities "
+        "(id, name, description, duration, minPlayers, MaxPlayers) "
+        "VALUES (:id, :name, :desc, :dur, :min, :max) "
+        "ON CONFLICT(id) DO UPDATE SET "
+        "name = excluded.name, "
+        "description = excluded.description, "
+        "duration = excluded.duration, "
+        "minPlayers = excluded.minPlayers, "
+        "MaxPlayers = excluded.MaxPlayers"
+        );
 
     for (const auto &id : std::as_const(toAdd)) {
         query.bindValue(":id", id);
@@ -160,68 +178,112 @@ void MngActivity::save_changes()
         }
     }
 
-    QSqlQuery del_query(activityDb);
-    QSqlQuery ins_query(activityDb);
 
-    del_query.prepare("DELETE FROM ActivityRequirements "
+    //Activity item requirements
+    QSqlQuery del_item_query(activityDb);
+    QSqlQuery ins_item_query(activityDb);
+    QSqlQuery del_tag_query(activityDb);
+    QSqlQuery ins_tag_query(activityDb);
+
+    del_item_query.prepare("DELETE FROM ActivityRequirements "
                   "WHERE activityId = :act_id AND itemId = :item_id ");
 
-    ins_query.prepare("INSERT INTO ActivityRequirements (activityId, itemId)"
-                  "VALUES (:act_id,:item_id)");
+    ins_item_query.prepare("INSERT OR REPLACE INTO ActivityRequirements (activityId, itemId)"
+                  "VALUES (:act_id, :item_id)");
+
+    del_tag_query.prepare("DELETE FROM ActivityTags "
+                      "WHERE activityId = :act_id AND tagId = :tag_id ");
+
+    ins_tag_query.prepare("INSERT OR REPLACE INTO ActivityTags (activityId, tagId)"
+                      "VALUES (:act_id, :tag_id)");
 
     for (const auto act_id : new_act_list.keys()) {
         const auto &new_act = new_act_list[act_id];
 
-        QSet<int> toAdd = new_act.items;
-        QSet<int> toRemove;
+        QSet<int> itemsToAdd = new_act.items;
+        QSet<int> tagsToAdd = new_act.tags;
+        QSet<int> itemsToRemove;
+        QSet<int> tagsToRemove;
 
         auto old_act = cur_act_list.constFind(act_id);
 
         if (old_act != cur_act_list.cend()) {
-            toRemove = old_act->items;
+            itemsToRemove = old_act->items;
+            itemsToRemove.subtract(new_act.items);
+            itemsToAdd.subtract(old_act->items);
 
-            toRemove.subtract(new_act.items);
-            toAdd.subtract(old_act->items);
+            tagsToRemove = old_act->tags;
+            tagsToRemove.subtract(new_act.tags);
+            tagsToAdd.subtract(old_act->tags);
         }
 
 
-        for (const auto &item_id : std::as_const(toRemove)) {
-            del_query.bindValue(":act_id", act_id);
-            del_query.bindValue(":item_id", item_id);
+        for (const auto &item_id : std::as_const(itemsToRemove)) {
+            del_item_query.bindValue(":act_id", act_id);
+            del_item_query.bindValue(":item_id", item_id);
 
-            if (!del_query.exec()) {
-                qInfo() << "Deletion failed:" << del_query.lastError();
+            if (!del_item_query.exec()) {
+                qInfo() << "Deletion failed:" << del_item_query.lastError();
                 activityDb.rollback();
                 return;
             }
         }
 
+        for (const auto &item_id : std::as_const(itemsToAdd)) {
+            ins_item_query.bindValue(":act_id", act_id);
+            ins_item_query.bindValue(":item_id", item_id);
 
-        for (const auto &item_id : std::as_const(toAdd)) {
-            ins_query.bindValue(":act_id", act_id);
-            ins_query.bindValue(":item_id", item_id);
+            if (!ins_item_query.exec()) {
+                qInfo() << "Insert failed:" << ins_item_query.lastError();
+                activityDb.rollback();
+                return;
+            }
+        }
 
-            if (!ins_query.exec()) {
-                qInfo() << "Insert failed:" << ins_query.lastError();
+        for (const auto &tag_id : std::as_const(tagsToRemove)) {
+            del_tag_query.bindValue(":act_id", act_id);
+            del_tag_query.bindValue(":tag_id", tag_id);
+
+            if (!del_tag_query.exec()) {
+                qInfo() << "Deletion failed:" << del_tag_query.lastError();
+                activityDb.rollback();
+                return;
+            }
+        }
+
+        for (const auto &tag_id : std::as_const(tagsToAdd)) {
+            ins_tag_query.bindValue(":act_id", act_id);
+            ins_tag_query.bindValue(":tag_id", tag_id);
+
+            if (!ins_tag_query.exec()) {
+                qInfo() << "Insert failed:" << ins_tag_query.lastError();
                 activityDb.rollback();
                 return;
             }
         }
     }
 
+
     activityDb.commit(); // commit all inserts at once
 
     cur_act_list = new_act_list;
+
+    QMessageBox msgBox(this);
+    msgBox.setText("Changes have been saved.");
+    msgBox.exec();
 }
 
-void MngActivity::add_tags(QHash<int, QString> tags)
+void MngActivity::set_tags(QHash<int, QString> tags)
 {
+    flowLayout->clear();
+
     for (auto [id, name] : tags.asKeyValueRange())
     {
-        Tag *tag_widget = new Tag(this, name);
+        Tag *tag_widget = new Tag(this, name, id);
         flowLayout->addWidget(tag_widget);
         connect(tag_widget, &Tag::tag_removed, this, [this, tag_widget] {
             flowLayout->removeWidget(tag_widget);
+            tagWidget->removeTag(tag_widget->tagId);
             tag_widget->hide();
             tag_widget->deleteLater();
 
@@ -263,8 +325,10 @@ void MngActivity::load_activities()
                                                             query.value(2).toString(),
                                                             query.value(3).toInt(),
                                                             query.value(4).toInt(),
-                                                            query.value(5).toInt()});
-        }
+                                                            query.value(5).toInt(),
+                                                            {},
+                                                            {} });
+            }
     }
 
     if (!query.exec("SELECT activityId, itemId FROM ActivityRequirements")) {
@@ -313,6 +377,7 @@ void MngActivity::add_activity()
     const int min = ui->act_min_p_slider->value();
     const int max = ui->act_max_p_spin->value();
     const QSet<int> reqs = itemWidget->selected_items;
+    const QSet<int> tags = flowLayout->getTags();
 
     if (name == ""){
         QMessageBox::warning(
@@ -337,6 +402,7 @@ void MngActivity::add_activity()
         act->min_players = min;
         act->max_players = max;
         act->items = reqs;
+        act->tags = tags;
 
         if (list_act)
         {
@@ -354,7 +420,7 @@ void MngActivity::add_activity()
             return;
         }
 
-        Activity act(name, desc, dur, min, max, reqs);
+        Activity act(name, desc, dur, min, max, reqs, tags);
 
 
         const int new_id = generate_id(cur_act_list.keys(), new_act_list.keys());
@@ -370,6 +436,7 @@ void MngActivity::add_activity()
     itemWidget->cancel_item();
     tagWidget->cancel_tag();
     cancel_activity();
+    flowLayout->clear();
 }
 
 void MngActivity::delete_activity()
@@ -377,15 +444,30 @@ void MngActivity::delete_activity()
     auto item = ui->act_list->currentItem();
     if (!item) return;
 
-    if (new_act_list.remove(find_same_name(item->text(), new_act_list))) {
-        ui->act_list->takeItem(ui->act_list->currentRow());
-    } else {
-        qWarning() << "Couldn't remove item";
-    }
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText("Are you sure you want to delete \"" + item->text() + "\"?");
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    int ret = msgBox.exec();
 
-    itemWidget->cancel_item();
-    tagWidget->cancel_tag();
-    cancel_activity();
+    switch (ret) {
+    case QMessageBox::Save:
+        if (new_act_list.remove(find_same_name(item->text(), new_act_list))) {
+            ui->act_list->takeItem(ui->act_list->currentRow());
+        } else {
+            qWarning() << "Couldn't remove item";
+        }
+
+        itemWidget->cancel_item();
+        tagWidget->cancel_tag();
+        cancel_activity();
+        return;
+    case QMessageBox::Cancel:
+        return;
+    default:
+        break;
+    }
 }
 
 void MngActivity::edit_activity(QListWidgetItem *list_item)
@@ -403,6 +485,10 @@ void MngActivity::edit_activity(QListWidgetItem *list_item)
     ui->act_max_p_spin->setValue(activity.max_players);
 
     itemWidget->selected_items = activity.items;
+    itemWidget->initial_items = activity.items;
+    tagWidget->selectedTags = activity.tags;
+    tagWidget->initialTags = activity.tags;
+    set_tags(tagWidget->getTags());
 
     editing_act = act_id;
 
