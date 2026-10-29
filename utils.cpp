@@ -16,6 +16,7 @@ int find_same_name(const QString& name, const QHash<int, T>& list)
 // Explicit instantiations
 template int find_same_name<Item>(const QString&, const QHash<int, Item>&);
 template int find_same_name<Activity>(const QString&, const QHash<int, Activity>&);
+template int find_same_name<Location>(const QString&, const QHash<int, Location>&);
 
 int generate_id(const QList<int>& old_ids, const QList<int>& new_ids)
 {

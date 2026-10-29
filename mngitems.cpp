@@ -245,7 +245,7 @@ void MngItems::delete_item()
     int ret = msgBox.exec();
 
     switch (ret) {
-    case QMessageBox::Save:
+    case QMessageBox::Ok:
         if (new_item_list.remove(find_same_name(item->text(), new_item_list))) {
             ui->existing_item_list->takeItem(ui->existing_item_list->currentRow());
         } else {

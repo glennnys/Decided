@@ -460,7 +460,7 @@ void MngActivity::delete_activity()
     int ret = msgBox.exec();
 
     switch (ret) {
-    case QMessageBox::Save:
+    case QMessageBox::Ok:
         if (new_act_list.remove(find_same_name(item->text(), new_act_list))) {
             ui->act_list->takeItem(ui->act_list->currentRow());
         } else {

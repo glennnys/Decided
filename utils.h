@@ -28,6 +28,13 @@ struct Activity{
     bool operator==(const Activity&) const = default;
 };
 
+struct Location{
+    QString name;
+    QSet<int> items;
+
+    bool operator==(const Location&) const = default;
+};
+
 template <typename T>
 int find_same_name(const QString& name, const QHash<int, T>& list);
 int generate_id(const QList<int>& old_ids, const QList<int>& new_ids);

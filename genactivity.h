@@ -16,7 +16,6 @@ class GenActivity : public QWidget
 public:
     explicit GenActivity(QWidget *parent = nullptr);
     ~GenActivity();
-
 private:
     Ui::GenActivity *ui;
     FlowLayout *tagholder;
@@ -24,6 +23,8 @@ private:
     QHash<int, Activity> activities;
     QHash<int, Item> items;
     QHash<int, QString> tags;
+    QHash<int, Location> currentLocations, newLocations;
+    int currentLocationId;
 
     QSet<int> selectedTags;
     QSet<int> forcedTags;
@@ -38,6 +39,14 @@ private:
     void resetSelection();
 
     void setForcedTag(int id, bool toggle);
+    void loadLocations();
+    void saveLocations();
+    void saveLocationsLocal();
+    void resetCurrentLocation(QString locationName);
+    void setCurrentLocation(QString locationName);
+    void updateLocCombo(QString newItem = "");
+    void deleteLocation();
+
 public slots:
     void setData(QHash<int, Activity> activities, QHash<int, Item> items, QHash<int, QString> tags);
 };

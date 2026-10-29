@@ -248,7 +248,7 @@ void MngTags::delete_tag(QListWidgetItem *item)
     int ret = msgBox.exec();
 
     switch (ret) {
-    case QMessageBox::Save:
+    case QMessageBox::Ok:
         if (new_tag_list.remove(new_tag_list.key(item->text()))) {
             ui->tag_list->removeItemWidget(item);
         } else {

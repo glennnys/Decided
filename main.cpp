@@ -78,6 +78,22 @@ bool connectActivityDb(QString folder_path){
         ); )");
         if (query.lastError().isValid()){ qDebug() << query.lastError(); }
 
+        query.exec(R"( CREATE TABLE IF NOT EXISTS "ItemsAtLocation" (
+            "locationId"	INTEGER NOT NULL,
+            "itemId"	INTEGER NOT NULL,
+            PRIMARY KEY("locationId","itemId"),
+            FOREIGN KEY("itemId") REFERENCES "Items"("id") ON UPDATE CASCADE ON DELETE CASCADE,
+            FOREIGN KEY("locationId") REFERENCES "Locations"("id") ON UPDATE CASCADE ON DELETE CASCADE
+        ); )");
+        if (query.lastError().isValid()){ qDebug() << query.lastError(); }
+
+        query.exec(R"( CREATE TABLE IF NOT EXISTS "Locations" (
+            "id"	INTEGER NOT NULL UNIQUE,
+            "name"	VARCHAR(255) NOT NULL UNIQUE,
+            PRIMARY KEY("id" AUTOINCREMENT)
+        ); )");
+        if (query.lastError().isValid()){ qDebug() << query.lastError(); }
+
         query.exec(R"( CREATE TABLE IF NOT EXISTS "Tags" (
             "id"	INTEGER NOT NULL UNIQUE,
             "name"	VARCHAR(255) NOT NULL UNIQUE,

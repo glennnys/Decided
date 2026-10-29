@@ -35,6 +35,15 @@ GenActivity::GenActivity(QWidget *parent)
     connect(ui->allItemList, &QListWidget::itemDoubleClicked, this, &GenActivity::selectItem);
     connect(ui->selectItemList, &QListWidget::itemDoubleClicked, this, &GenActivity::deselectItem);
     connect(ui->getActiveBtn, &QPushButton::clicked, this, &GenActivity::generate);
+
+    connect(ui->locCombo, &QComboBox::currentTextChanged, this, &GenActivity::resetCurrentLocation);
+    connect(ui->locCombo, &QComboBox::textActivated, this, &GenActivity::setCurrentLocation);
+    connect(ui->saveLocBtn, &QPushButton::clicked, this, &GenActivity::saveLocationsLocal);
+    connect(ui->deleteLoc, &QPushButton::clicked, this, &GenActivity::deleteLocation);
+
+    currentLocationId = -1;
+
+    loadLocations();
 }
 
 GenActivity::~GenActivity()
@@ -111,6 +120,239 @@ void GenActivity::generate()
         } else {
             rand -= activity.first;
         }
+    }
+}
+
+void GenActivity::loadLocations()
+{
+    QSqlDatabase activityDb = QSqlDatabase::database("activity");
+
+    QSqlQuery query(activityDb);
+
+    if (!query.exec("SELECT id, name FROM Locations")) {
+        qWarning() << "Query failed:" << query.lastError();
+    } else {
+        while (query.next()) {
+            currentLocations.insert(query.value(0).toInt(), {query.value(1).toString()});
+        }
+    }
+
+    if (!query.exec("SELECT locationId, itemId FROM ItemsAtLocation")) {
+        qWarning() << "Query failed:" << query.lastError();
+    } else {
+        while (query.next()) {
+            currentLocations[query.value(0).toInt()].items.insert(query.value(1).toInt());
+        }
+    }
+
+    newLocations = currentLocations;
+    updateLocCombo();
+}
+
+void GenActivity::updateLocCombo(QString newItem)
+{
+    if (newItem == "")
+    {
+        ui->locCombo->clear();
+        for (auto [id, location] : newLocations.asKeyValueRange())
+        {
+            ui->locCombo->addItem(location.name);
+        }
+
+        return;
+    }
+
+    ui->locCombo->addItem(newItem);
+}
+
+void GenActivity::resetCurrentLocation(QString locationName)
+{
+    if (locationName == "") {
+        currentLocationId = -1;
+    }
+}
+
+void GenActivity::setCurrentLocation(QString locationName)
+{
+    int newLocationId = find_same_name(locationName, newLocations);
+
+    if (newLocationId > 0 && newLocationId != currentLocationId)
+    {
+        currentLocationId = newLocationId;
+        selectedItems = newLocations[currentLocationId].items;
+        setItemDisplay();
+        return;
+    }
+}
+
+void GenActivity::saveLocationsLocal()
+{
+    if (ui->locCombo->currentText() == "") return;
+
+    if (currentLocationId > 0)
+    {
+        newLocations[currentLocationId].name = ui->locCombo->currentText();
+        newLocations[currentLocationId].items = selectedItems;
+    }
+    else
+    {
+        auto name = ui->locCombo->currentText();
+        newLocations.insert(generate_id(currentLocations.keys(), newLocations.keys()), {ui->locCombo->currentText(), selectedItems});
+    }
+
+    saveLocations();
+
+    updateLocCombo();
+}
+
+void GenActivity::saveLocations()
+{
+    QSqlDatabase activityDb = QSqlDatabase::database("activity");
+    QSqlQuery query(activityDb);
+
+    if (!query.exec("PRAGMA foreign_keys = ON")) {
+        qWarning() << "Failed to enable foreign keys:"
+                   << query.lastError();
+    }
+
+    //Items
+    QSet<int> toAdd;     // items to insert in DB
+    QSet<int> toRemove;  // items to delete from DB
+
+    //Activities
+    toAdd.clear();
+    toRemove.clear();
+
+    // Detect additions and updates
+    for (auto key : newLocations.keys()) {
+        if (!currentLocations.contains(key)) {
+            toAdd.insert(key); // new local item
+        }
+        else if (newLocations[key] != currentLocations[key]) {
+            toAdd.insert(key); // edited local item
+        }
+    }
+
+    // Detect removals
+    for (auto key : currentLocations.keys()) {
+        if (!newLocations.contains(key)) {
+            toRemove.insert(key);
+        }
+    }
+
+    activityDb.transaction();
+
+    query.prepare("DELETE FROM Locations "
+                  "WHERE id = :id");
+
+    for (const auto &id : std::as_const(toRemove)) {
+        query.bindValue(":id", id);
+
+        if (!query.exec()) {
+            qInfo() << "Deletion failed:" << query.lastError();
+            activityDb.rollback();
+            return;
+        }
+    }
+
+    query.prepare(
+        "INSERT INTO Locations "
+        "(id, name) "
+        "VALUES (:id, :name) "
+        "ON CONFLICT(id) DO UPDATE SET "
+        "name = excluded.name "
+        );
+
+    for (const auto &id : std::as_const(toAdd)) {
+        query.bindValue(":id", id);
+        query.bindValue(":name", newLocations[id].name);
+
+        if (!query.exec()) {
+            qInfo() << "Insert failed:" << query.lastError();
+            activityDb.rollback();
+            return;
+        }
+    }
+
+    //Activity item requirements
+    QSqlQuery delQuery(activityDb);
+    QSqlQuery insertQuery(activityDb);
+
+    delQuery.prepare("DELETE FROM ItemsAtLocation "
+                           "WHERE locationId = :locId AND itemId = :itemId ");
+
+    insertQuery.prepare("INSERT OR REPLACE INTO ItemsAtLocation (locationId, itemId)"
+                           "VALUES (:locId, :itemId)");
+
+    for (const auto locId : newLocations.keys()) {
+        const auto &newLoc = newLocations[locId];
+            toAdd = newLoc.items;
+
+        auto old_act = currentLocations.constFind(locId);
+
+        if (old_act != currentLocations.cend()) {
+            toRemove = old_act->items;
+            toRemove.subtract(newLoc.items);
+            toAdd.subtract(old_act->items);
+        }
+
+        for (const auto &itemId : std::as_const(toRemove)) {
+            delQuery.bindValue(":locId", locId);
+            delQuery.bindValue(":itemId", itemId);
+
+            if (!delQuery.exec()) {
+                qInfo() << "Deletion failed:" << delQuery.lastError();
+                activityDb.rollback();
+                return;
+            }
+        }
+
+        for (const auto &itemId : std::as_const(toAdd)) {
+            insertQuery.bindValue(":locId", locId);
+            insertQuery.bindValue(":itemId", itemId);
+
+            if (!insertQuery.exec()) {
+                qInfo() << "Insert failed:" << insertQuery.lastError();
+                activityDb.rollback();
+                return;
+            }
+        }
+    }
+
+
+    activityDb.commit(); // commit all inserts at once
+
+    currentLocations = newLocations;
+    updateLocCombo();
+}
+
+void GenActivity::deleteLocation()
+{
+    if (currentLocationId < 0) return;
+
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText("Are you sure you want to delete \"" + newLocations[currentLocationId].name + "\"?");
+    msgBox.setStandardButtons(QMessageBox::Cancel | QMessageBox::Ok);
+    msgBox.setDefaultButton(QMessageBox::Cancel);
+    int ret = msgBox.exec();
+
+    switch (ret) {
+    case QMessageBox::Ok:
+        if (newLocations.remove(currentLocationId)) {
+            currentLocationId = -1;
+            saveLocations();
+            selectedItems.clear();
+            setItemDisplay();
+        } else {
+            qWarning() << "Couldn't remove item";
+        }
+
+        return;
+    case QMessageBox::Cancel:
+        return;
+    default:
+        break;
     }
 }
 
