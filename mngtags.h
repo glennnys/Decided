@@ -44,6 +44,7 @@ private:
     void edit_tag(QListWidgetItem *item);
     void confirm_tags();
     void cancel_tags();
+    void select_tag(QListWidgetItem *item);
 signals:
     void tags_selected(QHash<int, QString> tags);
     void cancelled();

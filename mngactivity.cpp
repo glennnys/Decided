@@ -22,7 +22,6 @@ MngActivity::MngActivity(QWidget *parent)
     ui->placeholder->addWidget(tagWidget);
     connect(itemWidget, &MngItems::items_selected, this, [this] {setContentWidget(0);});
     connect(tagWidget, &MngTags::tags_selected, this, &MngActivity::set_tags);
-    connect(tagWidget, &MngTags::tags_selected, this, [this] {setContentWidget(1);});
 
     connect(ui->edit_item_btn, &QPushButton::clicked, this, [this] {setContentWidget(0);});
     connect(ui->edit_tags_btn, &QPushButton::clicked, this, [this] {setContentWidget(1);});
@@ -372,7 +371,9 @@ void MngActivity::cancel_activity()
     editing_act = -1;
 
     itemWidget->cancel_item();
+    tagWidget->selectedTags.clear();
     tagWidget->cancel_tag();
+    flowLayout->clear();
     set_act_display();
 }
 

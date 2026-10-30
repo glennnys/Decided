@@ -16,6 +16,7 @@ MngTags::MngTags(QWidget *parent, bool selectOnly)
     connect(ui->deleteBtn, &QPushButton::clicked, this, &MngTags::toggleDelete);
     connect(ui->tag_entry, &QLineEdit::returnPressed, this, &MngTags::add_tag);
     connect(ui->resetTagBtn, &QPushButton::clicked, this, &MngTags::cancel_tag);
+    connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::select_tag);
     connect(ui->confirmBtnBox, &QDialogButtonBox::accepted, this, &MngTags::confirm_tags);
     connect(ui->confirmBtnBox, &QDialogButtonBox::rejected, this, &MngTags::cancel_tags);
 
@@ -113,15 +114,27 @@ void MngTags::save_changes()
     cur_tag_list = new_tag_list;
 }
 
+void MngTags::select_tag(QListWidgetItem *item)
+{
+    int item_id = new_tag_list.key(item->text());
+    if (item->isSelected())
+    {
+        selectedTags.insert(item_id);
+    }
+    else
+    {
+        selectedTags.remove(item_id);
+    }
+}
+
 void MngTags::confirm_tags()
 {
     QHash<int, QString> tags;
-    for (auto tag : ui->tag_list->selectedItems())
+    for (auto tag : selectedTags)
     {
-        const auto id = new_tag_list.key(tag->text());
-        const auto value = new_tag_list.find(id);
+        const auto value = new_tag_list.find(tag);
         if (value == new_tag_list.end()) return;
-        tags.insert(id, value.value());
+        tags.insert(tag, value.value());
     }
 
     emit tags_selected(tags);
@@ -178,8 +191,6 @@ void MngTags::cancel_tag()
     ui->add_tag_btn->setText("Add");
 
     editing_tag = -1;
-
-    set_tag_display();
 }
 
 void MngTags::add_tag()
@@ -250,7 +261,7 @@ void MngTags::delete_tag(QListWidgetItem *item)
     switch (ret) {
     case QMessageBox::Ok:
         if (new_tag_list.remove(new_tag_list.key(item->text()))) {
-            ui->tag_list->removeItemWidget(item);
+            ui->tag_list->takeItem(ui->tag_list->currentRow());
         } else {
             qWarning() << "Couldn't remove item";
         }
@@ -269,14 +280,14 @@ void MngTags::toggleDelete()
     if (!editable) return;
     if (ui->deleteBtn->isChecked())
     {
-        disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
+        disconnect(ui->tag_list, &QListWidget::itemDoubleClicked, this, &MngTags::edit_tag);
         connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::delete_tag);
         ui->deleteBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FormatJustifyFill));
         ui->tag_list->setSelectionMode(QAbstractItemView::NoSelection);
         return;
     } else {
         disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::delete_tag);
-        connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
+        connect(ui->tag_list, &QListWidget::itemDoubleClicked, this, &MngTags::edit_tag);
         ui->deleteBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
         ui->tag_list->setSelectionMode(QAbstractItemView::MultiSelection);
         return;
