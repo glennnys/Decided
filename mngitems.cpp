@@ -10,19 +10,21 @@ MngItems::MngItems(QWidget *parent)
     editing_item = -1;
     connect(ui->search_item_entry, &QLineEdit::textChanged, this, &MngItems::set_item_display);
     connect(ui->search_item_refresh, &QPushButton::clicked, this, [this] {ui->search_item_entry->clear();});
-    connect(ui->resetItemBtn, &QPushButton::clicked, this, &MngItems::cancel_item);
-    connect(ui->createItemBtn, &QPushButton::clicked, this, &MngItems::add_item);
+    connect(ui->saveCancelItemBtns, &QDialogButtonBox::rejected, this, &MngItems::cancel_item);
+    connect(ui->saveCancelItemsBtns, &QDialogButtonBox::accepted, this, &MngItems::add_item);
     connect(ui->delete_item_btn, &QPushButton::clicked, this, &MngItems::delete_item);
-    connect(ui->existing_item_list, &QListWidget::itemClicked, this, &MngItems::edit_item);
-    connect(ui->selected_item_list, &QListWidget::itemClicked, this, &MngItems::edit_item);
+    connect(ui->existing_item_list, &QListWidget::itemClicked, this, &MngItems::change_selected);
+    connect(ui->selected_item_list, &QListWidget::itemClicked, this, &MngItems::change_selected);
     connect(ui->existing_item_list, &QListWidget::itemDoubleClicked, this, &MngItems::select_item);
     connect(ui->selected_item_list, &QListWidget::itemDoubleClicked, this, &MngItems::deselect_item);
+    connect(ui->editBtn, &QPushButton::clicked, this, &MngItems::edit_item);
 
     connect(ui->add_item_btn,    &QPushButton::clicked, this, &MngItems::select_item);
     connect(ui->remove_item_btn, &QPushButton::clicked, this, &MngItems::deselect_item);
     connect(ui->reset_item_list, &QPushButton::clicked, this, &MngItems::reset_selection);
-    connect(ui->confirmBtnBox, &QDialogButtonBox::accepted, this, &MngItems::confirm_items);
-    connect(ui->confirmBtnBox, &QDialogButtonBox::rejected, this, &MngItems::cancel_items);
+    connect(ui->closeBtn, &QPushButton::clicked, this, &MngItems::close_items);
+    // connect(ui->saveCancelItemsBtns, &QDialogButtonBox::accepted, this, &MngItems::close_items);
+    connect(ui->saveCancelItemsBtns, &QDialogButtonBox::rejected, this, &MngItems::cancel_items);
 
     load_items();
     set_item_display();
@@ -111,9 +113,9 @@ void MngItems::save_changes()
     cur_item_list = new_item_list;
 }
 
-void MngItems::confirm_items()
+void MngItems::close()
 {
-    emit items_selected(selected_items);
+    emit close_items();
 }
 
 void MngItems::cancel_items()
@@ -165,7 +167,6 @@ void MngItems::cancel_item()
     ui->item_desc_entry->clear();
 
     ui->item_lbl->setText("New item");
-    ui->createItemBtn->setText("Add");
 
     editing_item = -1;
 
@@ -261,13 +262,34 @@ void MngItems::delete_item()
     }
 }
 
-void MngItems::edit_item(QListWidgetItem *list_item)
+void MngItems::change_selected(QListWidgetItem *list_item)
 {
+    if (ui->existing_item_list->currentItem() == list_item)
+    {
+        ui->selected_item_list->clearSelection();
+    }
+    else
+    {
+        ui->existing_item_list->clearSelection();
+    }
+}
+
+void MngItems::edit_item()
+{
+
+    QListWidgetItem *list_item;
+    if (ui->existing_item_list->currentItem() != nullptr)
+    {
+        list_item = ui->existing_item_list->currentItem();
+    }
+    else
+    {
+        list_item = ui->selected_item_list->currentItem();
+    }
     int item_id = find_same_name(list_item->text(), new_item_list);
 
     if (item_id < 0) return;
     ui->item_lbl->setText("Edit item");
-    ui->createItemBtn->setText("Edit");
 
     ui->item_name_entry->setText(new_item_list[item_id].name);
     ui->item_desc_entry->setText(new_item_list[item_id].description);

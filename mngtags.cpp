@@ -14,10 +14,13 @@ MngTags::MngTags(QWidget *parent, bool selectOnly)
     connect(ui->search_edit, &QLineEdit::textChanged, this, &MngTags::set_tag_display);
     connect(ui->add_tag_btn, &QPushButton::clicked, this, &MngTags::add_tag);
     connect(ui->deleteBtn, &QPushButton::clicked, this, &MngTags::toggleDelete);
+    connect(ui->editBtn, &QPushButton::clicked, this, &MngTags::toggleEdit);
     connect(ui->tag_entry, &QLineEdit::returnPressed, this, &MngTags::add_tag);
     connect(ui->resetTagBtn, &QPushButton::clicked, this, &MngTags::cancel_tag);
-    connect(ui->confirmBtnBox, &QDialogButtonBox::accepted, this, &MngTags::confirm_tags);
-    connect(ui->confirmBtnBox, &QDialogButtonBox::rejected, this, &MngTags::cancel_tags);
+    connect(ui->saveCancelTagBtns, &QDialogButtonBox::accepted, this, &MngTags::confirm_tags);
+    connect(ui->saveCancelTagBtns, &QDialogButtonBox::rejected, this, &MngTags::cancel_tags);
+    connect(ui->closeBtn, &QPushButton::clicked, this, &MngTags::close);
+
 
     ui->deleteBtn->setChecked(false);
     toggleDelete();
@@ -113,8 +116,14 @@ void MngTags::save_changes()
     cur_tag_list = new_tag_list;
 }
 
+void MngTags::close()
+{
+    emit close_tags();
+}
+
 void MngTags::confirm_tags()
 {
+    initialTags = selectedTags;
     QHash<int, QString> tags;
     for (auto tag : ui->tag_list->selectedItems())
     {
@@ -145,11 +154,24 @@ void MngTags::set_tag_display()
         {
             QListWidgetItem *widgetItem = new QListWidgetItem(tag);
             ui->tag_list->addItem(widgetItem);
-            if (selectedTags.contains(id)) widgetItem->setSelected(true);
+            if (selectedTags.contains(id))
+            {
+                widgetItem->setSelected(true);
+            }
         }
     }
 
     ui->tag_list->sortItems();
+}
+
+void MngTags::setSelectedTags()
+{
+    selectedTags.clear();
+    for (auto tag : ui->tag_list->selectedItems())
+    {
+        const auto id = new_tag_list.key(tag->text());
+        selectedTags.insert(id);
+    }
 }
 
 void MngTags::load_tags()
@@ -269,16 +291,44 @@ void MngTags::toggleDelete()
     if (!editable) return;
     if (ui->deleteBtn->isChecked())
     {
-        disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
+        ui->editBtn->setChecked(false);
+        toggleEdit();
+
+        setSelectedTags();
+        ui->tag_list->clearSelection();
         connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::delete_tag);
         ui->deleteBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FormatJustifyFill));
         ui->tag_list->setSelectionMode(QAbstractItemView::NoSelection);
         return;
     } else {
         disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::delete_tag);
-        connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
         ui->deleteBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
         ui->tag_list->setSelectionMode(QAbstractItemView::MultiSelection);
+        set_tag_display();
+        return;
+    }
+}
+
+void MngTags::toggleEdit()
+{
+    if (!editable) return;
+    if (ui->editBtn->isChecked())
+    {
+        ui->deleteBtn->setChecked(false);
+        toggleDelete();
+
+        setSelectedTags();
+        ui->tag_list->clearSelection();
+        connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
+        ui->editBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FormatJustifyFill));
+        ui->tag_list->setSelectionMode(QAbstractItemView::NoSelection);
+        return;
+    } else {
+        disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
+        ui->editBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+        ui->tag_list->setSelectionMode(QAbstractItemView::MultiSelection);
+        set_tag_display();
+        cancel_tag();
         return;
     }
 }

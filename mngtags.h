@@ -44,8 +44,12 @@ private:
     void edit_tag(QListWidgetItem *item);
     void confirm_tags();
     void cancel_tags();
+    void close();
+    void toggleEdit();
+    void setSelectedTags();
 signals:
     void tags_selected(QHash<int, QString> tags);
+    void close_tags();
     void cancelled();
 };
 

@@ -12,17 +12,17 @@ MngActivity::MngActivity(QWidget *parent)
     ui->setupUi(this);
 
     auto shortcut = new QShortcut(QKeySequence(tr("Ctrl+S")), parent);
-    connect(ui->save_btn, &QPushButton::clicked, this, &MngActivity::save_changes);
+    connect(ui->saveCancelAllBtns, &QDialogButtonBox::accepted, this, &MngActivity::save_changes);
     connect(shortcut, &QShortcut::activated, this, &MngActivity::save_changes);
-    connect(ui->cancel_btn, &QPushButton::clicked, this, &MngActivity::cancel_changes);
+    connect(ui->saveCancelAllBtns, &QDialogButtonBox::rejected, this, &MngActivity::cancel_changes);
 
     itemWidget = new MngItems;
     tagWidget = new MngTags;
     ui->placeholder->addWidget(itemWidget);
     ui->placeholder->addWidget(tagWidget);
-    connect(itemWidget, &MngItems::items_selected, this, [this] {setContentWidget(0);});
+    connect(itemWidget, &MngItems::close_items, this, [this] {setContentWidget(0);});
     connect(tagWidget, &MngTags::tags_selected, this, &MngActivity::set_tags);
-    connect(tagWidget, &MngTags::tags_selected, this, [this] {setContentWidget(1);});
+    connect(tagWidget, &MngTags::close_tags, this, [this] {setContentWidget(1);});
 
     connect(ui->edit_item_btn, &QPushButton::clicked, this, [this] {setContentWidget(0);});
     connect(ui->edit_tags_btn, &QPushButton::clicked, this, [this] {setContentWidget(1);});
@@ -33,10 +33,11 @@ MngActivity::MngActivity(QWidget *parent)
     editing_act = -1;
     connect(ui->search_act_entry, &QLineEdit::textChanged, this, &MngActivity::set_act_display);
     connect(ui->search_act_refresh, &QPushButton::clicked, this, [this] {ui->search_act_entry->clear();});
-    connect(ui->confirm_act_btn, &QPushButton::clicked, this, &MngActivity::add_activity);
-    connect(ui->cancel_act_btn, &QPushButton::clicked, this, &MngActivity::cancel_activity);
+    connect(ui->saveCancelActBtns, &QDialogButtonBox::accepted, this, &MngActivity::add_activity);
+    connect(ui->saveCancelActBtns, &QDialogButtonBox::rejected, this, &MngActivity::cancel_activity);
     connect(ui->delete_act_btn, &QPushButton::clicked, this, &MngActivity::delete_activity);
-    connect(ui->act_list, &QListWidget::itemClicked, this, &MngActivity::edit_activity);
+    connect(ui->editBtn, &QPushButton::clicked, this, &MngActivity::edit_activity);
+    connect(ui->act_list, &QListWidget::itemDoubleClicked, this, &MngActivity::edit_activity);
 
     connect(ui->act_min_p_spin, &QSpinBox::valueChanged, ui->act_max_p_spin, &QSpinBox::setMinimum);
     connect(ui->act_min_p_spin, &QSpinBox::valueChanged, ui->act_max_p_slider, &QSlider::setMinimum);
@@ -367,8 +368,6 @@ void MngActivity::cancel_activity()
     ui->act_max_p_spin->setValue(4);
     itemWidget->selected_items.clear();
 
-    ui->confirm_act_btn->setText("Add activity");
-
     editing_act = -1;
 
     itemWidget->cancel_item();
@@ -478,12 +477,12 @@ void MngActivity::delete_activity()
     }
 }
 
-void MngActivity::edit_activity(QListWidgetItem *list_item)
+void MngActivity::edit_activity()
 {
+    QListWidgetItem *list_item = ui->act_list->currentItem();
     int act_id = find_same_name(list_item->text(), new_act_list);
 
     if (act_id < 0) return;
-    ui->confirm_act_btn->setText("Edit activity");
     auto activity = new_act_list[act_id];
 
     ui->act_name_entry->setText(activity.name);

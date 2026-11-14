@@ -6,26 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>476</width>
-    <height>733</height>
+    <width>694</width>
+    <height>924</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_2">
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
-    <number>0</number>
-   </property>
+  <layout class="QVBoxLayout" name="verticalLayout_3">
+   <item>
+    <widget class="QDialogButtonBox" name="saveCancelAllBtns">
+     <property name="font">
+      <font>
+       <pointsize>20</pointsize>
+      </font>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Save</set>
+     </property>
+    </widget>
+   </item>
    <item>
     <layout class="QHBoxLayout" name="editWindowLayout">
      <property name="spacing">
@@ -34,21 +34,6 @@
      <item>
       <widget class="QWidget" name="activity_widget" native="true">
        <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="spacing">
-         <number>0</number>
-        </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
-         <number>0</number>
-        </property>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_20">
           <item>
@@ -113,6 +98,19 @@
             </property>
             <property name="icon">
              <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="editBtn">
+            <property name="toolTip">
+             <string>Edit last selected activity</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::DocumentProperties"/>
             </property>
            </widget>
           </item>
@@ -185,48 +183,8 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="1">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QLineEdit" name="act_name_entry">
-              <property name="minimumSize">
-               <size>
-                <width>128</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="inputMask">
-               <string/>
-              </property>
-              <property name="text">
-               <string/>
-              </property>
-              <property name="placeholderText">
-               <string>Insert activity name</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="edit_item_btn">
-              <property name="toolTip">
-               <string>Opens item manager panel</string>
-              </property>
-              <property name="text">
-               <string>Edit items</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="edit_tags_btn">
-            <property name="toolTip">
-             <string>Opens tag manager panel</string>
-            </property>
-            <property name="text">
-             <string>Tags</string>
-            </property>
-           </widget>
+          <item row="1" column="1">
+           <widget class="QWidget" name="tag_holder" native="true"/>
           </item>
           <item row="2" column="0">
            <widget class="QLabel" name="label_2">
@@ -392,40 +350,57 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="1">
-           <widget class="QWidget" name="tag_holder" native="true"/>
+          <item row="1" column="0">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QPushButton" name="edit_tags_btn">
+              <property name="toolTip">
+               <string>Opens tag manager panel</string>
+              </property>
+              <property name="text">
+               <string>Edit tags</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="edit_item_btn">
+              <property name="toolTip">
+               <string>Opens item manager panel</string>
+              </property>
+              <property name="text">
+               <string>Edit requirements</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="act_name_entry">
+            <property name="minimumSize">
+             <size>
+              <width>128</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="inputMask">
+             <string/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="placeholderText">
+             <string>Insert activity name</string>
+            </property>
+           </widget>
           </item>
          </layout>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_14">
           <item>
-           <spacer name="horizontalSpacer_8">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="cancel_act_btn">
-            <property name="toolTip">
-             <string>Clear activity creation fields</string>
-            </property>
-            <property name="text">
-             <string>Clear</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="confirm_act_btn">
-            <property name="text">
-             <string>Add activity</string>
+           <widget class="QDialogButtonBox" name="saveCancelActBtns">
+            <property name="standardButtons">
+             <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
             </property>
            </widget>
           </item>
@@ -448,75 +423,6 @@
          <width>0</width>
          <height>16777215</height>
         </size>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_10">
-     <property name="spacing">
-      <number>3</number>
-     </property>
-     <property name="leftMargin">
-      <number>3</number>
-     </property>
-     <property name="topMargin">
-      <number>3</number>
-     </property>
-     <property name="rightMargin">
-      <number>3</number>
-     </property>
-     <property name="bottomMargin">
-      <number>3</number>
-     </property>
-     <item>
-      <spacer name="horizontalSpacer_5">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancel_btn">
-       <property name="font">
-        <font>
-         <pointsize>16</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::ProcessStop"/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="save_btn">
-       <property name="font">
-        <font>
-         <pointsize>16</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Save</string>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::DocumentSave"/>
        </property>
       </widget>
      </item>

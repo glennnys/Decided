@@ -45,7 +45,7 @@ private:
     void cancel_activity();
     void add_activity();
     void delete_activity();
-    void edit_activity(QListWidgetItem *item);
+    void edit_activity();
 
     void set_tags(QHash<int, QString> tags);
 

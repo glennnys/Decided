@@ -35,16 +35,17 @@ private:
     void load_items();
     void add_item();
     void delete_item();
-    void edit_item(QListWidgetItem *item);
+    void edit_item();
 
     void select_item();
     void deselect_item();
     void reset_selection();
 
-    void confirm_items();
+    void close();
     void cancel_items();
+    void change_selected(QListWidgetItem *list_item);
 signals:
-    void items_selected(QSet<int> selected_items);
+    void close_items();
 };
 
 #endif // MNGITEMS_H
