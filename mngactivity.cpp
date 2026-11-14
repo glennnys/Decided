@@ -371,7 +371,9 @@ void MngActivity::cancel_activity()
     editing_act = -1;
 
     itemWidget->cancel_item();
+    tagWidget->selectedTags.clear();
     tagWidget->cancel_tag();
+    flowLayout->clear();
     set_act_display();
 }
 
