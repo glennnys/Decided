@@ -277,15 +277,14 @@ void MngItems::change_selected(QListWidgetItem *list_item)
 void MngItems::edit_item()
 {
 
-    QListWidgetItem *list_item;
-    if (ui->existing_item_list->currentItem() != nullptr)
-    {
-        list_item = ui->existing_item_list->currentItem();
-    }
-    else
-    {
+    QListWidgetItem *list_item = ui->existing_item_list->currentItem();
+    if (!list_item){
         list_item = ui->selected_item_list->currentItem();
+
+        if (!list_item) return;
     }
+
+
     int item_id = find_same_name(list_item->text(), new_item_list);
 
     if (item_id < 0) return;
