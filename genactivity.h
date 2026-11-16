@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "mngtags.h"
 #include "utils.h"
+#include "selectedactivity.h"
 
 namespace Ui {
 class GenActivity;
@@ -46,6 +47,11 @@ private:
     void setCurrentLocation(QString locationName);
     void updateLocCombo(QString newItem = "");
     void deleteLocation();
+
+    SelectedActivity *SelectedActivityWindow;
+
+signals:
+    void activitySelected(Activity selectedActivity);
 
 public slots:
     void setData(QHash<int, Activity> activities, QHash<int, Item> items, QHash<int, QString> tags);

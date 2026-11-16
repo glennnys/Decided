@@ -44,6 +44,8 @@ GenActivity::GenActivity(QWidget *parent)
     currentLocationId = -1;
 
     loadLocations();
+
+    SelectedActivityWindow = new SelectedActivity();
 }
 
 GenActivity::~GenActivity()
@@ -110,12 +112,7 @@ void GenActivity::generate()
     {
         if (rand < activity.first)
         {
-            QMessageBox msgBox(this);
-            msgBox.setText("Your activity is...");
-            msgBox.setDetailedText(activity.second.name + "!");
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.exec();
-
+            emit activitySelected(activity.second);
             return;
         } else {
             rand -= activity.first;

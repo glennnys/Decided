@@ -29,6 +29,7 @@ qt_add_executable(Decided
     utils.h utils.cpp
     mngtags.h mngtags.cpp mngtags.ui
     tag.h tag.cpp tag.ui
+    selectedactivity.h selectedactivity.cpp selectedactivity.ui
 )
 
 target_link_libraries(Decided
