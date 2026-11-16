@@ -31,7 +31,7 @@ private:
     QSet<int> forcedTags;
     QSet<int> selectedItems;
 
-    void generate();
+    void generate(Activity *currentActivity = nullptr);
     void setTags(QHash<int, QString> tags);
 
     void setItemDisplay();

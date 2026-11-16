@@ -133,29 +133,12 @@
       </widget>
      </item>
      <item>
-      <widget class="QLabel" name="editingLabel">
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QPushButton" name="saveLocBtn">
        <property name="toolTip">
         <string>Save the current item selection to the location. Creates a new location if it does not yet exist.</string>
        </property>
        <property name="text">
         <string>Save to location</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="editLocBtn">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::DocumentProperties"/>
        </property>
       </widget>
      </item>

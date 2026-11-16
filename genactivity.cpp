@@ -13,6 +13,8 @@ GenActivity::GenActivity(QWidget *parent)
 {
     ui->setupUi(this);
 
+    SelectedActivityWindow = new SelectedActivity();
+
     tagholder = new FlowLayout;
     ui->tagPlaceholder->setLayout(tagholder);
 
@@ -41,11 +43,12 @@ GenActivity::GenActivity(QWidget *parent)
     connect(ui->saveLocBtn, &QPushButton::clicked, this, &GenActivity::saveLocationsLocal);
     connect(ui->deleteLoc, &QPushButton::clicked, this, &GenActivity::deleteLocation);
 
+    connect(this, &GenActivity::activitySelected, SelectedActivityWindow, &SelectedActivity::fillActivity);
+    connect(SelectedActivityWindow, &SelectedActivity::rerollActivity, this, &GenActivity::generate);
+
     currentLocationId = -1;
 
     loadLocations();
-
-    SelectedActivityWindow = new SelectedActivity();
 }
 
 GenActivity::~GenActivity()
@@ -62,7 +65,7 @@ void GenActivity::setData(QHash<int, Activity> activities, QHash<int, Item> item
     setItemDisplay();
 }
 
-void GenActivity::generate()
+void GenActivity::generate(Activity *currentActivity)
 {
     QHash<int, Activity> availableActivities = activities;
     QList<QPair<int, Activity>> possibleActivities;
@@ -92,9 +95,11 @@ void GenActivity::generate()
         QSet<int> overlap = activity.tags;
         overlap.intersect(selectedTags);
 
-        possibleActivities.append(qMakePair(overlap.count() + 1, activity));
-
-        totalWeight += overlap.count() + 1;
+        //+1 weight gives all viable options a chance but heavily favous more overlap, current activity should have no weight.
+        bool addWeight = currentActivity && activity.name != currentActivity->name;
+        auto weight = (overlap.count() * 5 + 1) * addWeight;
+        possibleActivities.append(qMakePair(weight, activity));
+        totalWeight += weight;
     }
 
     if (possibleActivities.count() == 0)
@@ -106,6 +111,13 @@ void GenActivity::generate()
         return;
     }
 
+    // case for only 1 option. Important for when it is the same as the current activity.
+    if (possibleActivities.count() == 1)
+    {
+        emit activitySelected(possibleActivities[0].second);
+    }
+
+    //standard case, weighted random selection
     int rand = QRandomGenerator::global()->bounded(totalWeight);
 
     for (const auto &activity : possibleActivities)

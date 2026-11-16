@@ -18,8 +18,17 @@ public:
 
 private:
     Ui::SelectedActivity *ui;
+    Activity *selectedActivity;
 
-private slots:
+    QHash<int, Item> items;
+    QHash<int, QString> tags;
+
+    void toggleWidget();
+    void loadData();
+signals:
+    void rerollActivity(Activity *currentActivity);
+
+public slots:
     void fillActivity(Activity selectedActivity);
 };
 
