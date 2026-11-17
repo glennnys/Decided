@@ -31,7 +31,7 @@ private:
     QSet<int> forcedTags;
     QSet<int> selectedItems;
 
-    void generate(Activity *currentActivity = nullptr);
+    void generate();
     void setTags(QHash<int, QString> tags);
 
     void setItemDisplay();
@@ -51,7 +51,7 @@ private:
     SelectedActivity *SelectedActivityWindow;
 
 signals:
-    void activitySelected(Activity selectedActivity);
+    void activitySelected(Activity *selectedActivity);
 
 public slots:
     void setData(QHash<int, Activity> activities, QHash<int, Item> items, QHash<int, QString> tags);

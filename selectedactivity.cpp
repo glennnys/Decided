@@ -45,9 +45,10 @@ void SelectedActivity::loadData()
 
 void SelectedActivity::toggleWidget()
 {
+    //TODO: include window height
     bool opening =  ui->closeableWidget->maximumHeight() == 0;
-    const int start = ui->closeableWidget->maximumHeight();
-    const int end = 10000 * opening;
+    const int start = ui->closeableWidget->height();
+    const int end = this->height() * opening;
 
     auto *animation = new QPropertyAnimation(ui->closeableWidget, "maximumHeight", this); //setting maximum height allows the widget to stretch and adapt normally instead of forcing height
 
@@ -61,26 +62,28 @@ void SelectedActivity::toggleWidget()
     if (opening)
     {
         ui->revealBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoUp));
-        ui->revealBtn->setText("Hide");
+        ui->revealBtn->setText("Hide  ");
+        ui->closeableWidget->setMaximumHeight(100000);
     }
     else
     {
         ui->revealBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoDown));
-        ui->revealBtn->setText("Reveal");
+        ui->revealBtn->setText("Reveal  ");
+        ui->closeableWidget->setMaximumHeight(0);
     }
 }
 
-void SelectedActivity::fillActivity(Activity selectedActivity)
+void SelectedActivity::fillActivity(Activity *selectedActivity)
 {
-    this->selectedActivity = &selectedActivity;
-    ui->namePlaceholder->setText(selectedActivity.name + "!");
+    this->selectedActivity = selectedActivity;
+    ui->namePlaceholder->setText(selectedActivity->name + "!");
     //ui->peoplePlaceholder->setText("Number of people: " + selectedActivity.min_players + "-" + selectedActivity.max_players);
     //ui->durationPlaceholder->setText("Estimated duration: " + str(selectedActivity.duration/60) + ":" + selectedActivity.duration%60);
-    ui->descriptionBox->setText(selectedActivity.description);
+    ui->descriptionBox->setText(selectedActivity->description);
 
     ui->tagList->clear();
 
-    for (auto id : selectedActivity.tags)
+    for (auto id : selectedActivity->tags)
     {
         QListWidgetItem *widgetItem = new QListWidgetItem(tags.find(id).value());
         ui->tagList->addItem(widgetItem);
@@ -90,7 +93,7 @@ void SelectedActivity::fillActivity(Activity selectedActivity)
 
     ui->itemList->clear();
 
-    for (auto id : selectedActivity.items)
+    for (auto id : selectedActivity->items)
     {
         QListWidgetItem *widgetItem = new QListWidgetItem(items.find(id).value().name);
             widgetItem->setToolTip(items.find(id).value().description);

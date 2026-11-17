@@ -45,6 +45,7 @@ GenActivity::GenActivity(QWidget *parent)
 
     connect(this, &GenActivity::activitySelected, SelectedActivityWindow, &SelectedActivity::fillActivity);
     connect(SelectedActivityWindow, &SelectedActivity::rerollActivity, this, &GenActivity::generate);
+    //connect(SelectedActivityWindow, &SelectedActivity::)
 
     currentLocationId = -1;
 
@@ -65,8 +66,9 @@ void GenActivity::setData(QHash<int, Activity> activities, QHash<int, Item> item
     setItemDisplay();
 }
 
-void GenActivity::generate(Activity *currentActivity)
+void GenActivity::generate()
 {
+    //TODO: fix current activity logic
     QHash<int, Activity> availableActivities = activities;
     QList<QPair<int, Activity>> possibleActivities;
     int totalWeight = 0;
@@ -96,8 +98,7 @@ void GenActivity::generate(Activity *currentActivity)
         overlap.intersect(selectedTags);
 
         //+1 weight gives all viable options a chance but heavily favous more overlap, current activity should have no weight.
-        bool addWeight = currentActivity && activity.name != currentActivity->name;
-        auto weight = (overlap.count() * 5 + 1) * addWeight;
+        auto weight = overlap.count() * 5 + 1;
         possibleActivities.append(qMakePair(weight, activity));
         totalWeight += weight;
     }
@@ -111,20 +112,14 @@ void GenActivity::generate(Activity *currentActivity)
         return;
     }
 
-    // case for only 1 option. Important for when it is the same as the current activity.
-    if (possibleActivities.count() == 1)
-    {
-        emit activitySelected(possibleActivities[0].second);
-    }
-
-    //standard case, weighted random selection
     int rand = QRandomGenerator::global()->bounded(totalWeight);
 
-    for (const auto &activity : possibleActivities)
+    for (auto &activity : possibleActivities)
     {
         if (rand < activity.first)
         {
-            emit activitySelected(activity.second);
+            SelectedActivityWindow->show();
+            // emit activitySelected(&activity.second); //TODO: fix segmentation fault
             return;
         } else {
             rand -= activity.first;
@@ -162,10 +157,15 @@ void GenActivity::updateLocCombo(QString newItem)
 {
     if (newItem == "")
     {
+        auto currentLocation = ui->locCombo->currentText();
         ui->locCombo->clear();
         for (auto [id, location] : newLocations.asKeyValueRange())
         {
             ui->locCombo->addItem(location.name);
+            if (location.name == currentLocation)
+            {
+                ui->locCombo->setCurrentText(location.name);
+            }
         }
 
         return;

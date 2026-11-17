@@ -29,7 +29,7 @@ signals:
     void rerollActivity(Activity *currentActivity);
 
 public slots:
-    void fillActivity(Activity selectedActivity);
+    void fillActivity(Activity *selectedActivity);
 };
 
 #endif // SELECTEDACTIVITY_H
