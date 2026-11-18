@@ -51,7 +51,7 @@ private:
     SelectedActivity *SelectedActivityWindow;
 
 signals:
-    void activitySelected(Activity *selectedActivity);
+    void activitySelected(const Activity selectedActivity);
 
 public slots:
     void setData(QHash<int, Activity> activities, QHash<int, Item> items, QHash<int, QString> tags);

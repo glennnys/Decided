@@ -18,7 +18,7 @@ public:
 
 private:
     Ui::SelectedActivity *ui;
-    Activity *selectedActivity;
+    Activity selectedActivity;
 
     QHash<int, Item> items;
     QHash<int, QString> tags;
@@ -26,10 +26,10 @@ private:
     void toggleWidget();
     void loadData();
 signals:
-    void rerollActivity(Activity *currentActivity);
+    void rerollActivity(Activity currentActivity);
 
 public slots:
-    void fillActivity(Activity *selectedActivity);
+    void fillActivity(const Activity selectedActivity);
 };
 
 #endif // SELECTEDACTIVITY_H

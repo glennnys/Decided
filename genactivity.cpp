@@ -13,7 +13,7 @@ GenActivity::GenActivity(QWidget *parent)
 {
     ui->setupUi(this);
 
-    SelectedActivityWindow = new SelectedActivity();
+    SelectedActivityWindow = new SelectedActivity(this);
 
     tagholder = new FlowLayout;
     ui->tagPlaceholder->setLayout(tagholder);
@@ -114,12 +114,15 @@ void GenActivity::generate()
 
     int rand = QRandomGenerator::global()->bounded(totalWeight);
 
-    for (auto &activity : possibleActivities)
+    for (const auto activity : possibleActivities)
     {
         if (rand < activity.first)
         {
-            SelectedActivityWindow->show();
-            // emit activitySelected(&activity.second); //TODO: fix segmentation fault
+            if (SelectedActivityWindow->isHidden())
+            {
+                SelectedActivityWindow->show();
+            }
+            emit activitySelected(activity.second); //TODO: fix segmentation fault
             return;
         } else {
             rand -= activity.first;
