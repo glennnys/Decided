@@ -50,11 +50,13 @@ private:
 
     SelectedActivity *SelectedActivityWindow;
 
+    void saveLastActivity(int activityId);
 signals:
     void activitySelected(const Activity selectedActivity);
 
 public slots:
     void setData(QHash<int, Activity> activities, QHash<int, Item> items, QHash<int, QString> tags);
+    int getLastActivity();
 };
 
 #endif // GENACTIVITY_H

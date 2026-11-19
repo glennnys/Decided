@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>935</width>
-    <height>796</height>
+    <width>600</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -193,10 +193,13 @@
           <property name="orientation">
            <enum>Qt::Orientation::Vertical</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Policy::Fixed</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
             <width>20</width>
-            <height>40</height>
+            <height>1</height>
            </size>
           </property>
          </spacer>

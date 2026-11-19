@@ -101,6 +101,13 @@ bool connectActivityDb(QString folder_path){
         ); )");
         if (query.lastError().isValid()){ qDebug() << query.lastError(); }
 
+        query.exec(R"( CREATE TABLE IF NOT EXISTS "MiscData" (
+            "name"	VARCHAR(255) NOT NULL UNIQUE,
+            "data"	BLOB NOT NULL,
+            PRIMARY KEY("name")
+        ); )");
+        if (query.lastError().isValid()){ qDebug() << query.lastError(); }
+
     }
 
     return true;

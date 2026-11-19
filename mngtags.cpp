@@ -29,6 +29,10 @@ MngTags::MngTags(QWidget *parent, bool selectOnly)
     {
         ui->deleteBtn->hide();
         ui->deleteBtn->deleteLater();
+        ui->editBtn->hide();
+        ui->editBtn->deleteLater();
+        ui->closeBtn->hide();
+        ui->closeBtn->deleteLater();
         clearLayout(ui->addTagLayout->layout());
     }
 }

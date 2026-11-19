@@ -45,7 +45,7 @@ GenActivity::GenActivity(QWidget *parent)
 
     connect(this, &GenActivity::activitySelected, SelectedActivityWindow, &SelectedActivity::fillActivity);
     connect(SelectedActivityWindow, &SelectedActivity::rerollActivity, this, &GenActivity::generate);
-    //connect(SelectedActivityWindow, &SelectedActivity::)
+    connect(ui->lastBtn, &QPushButton::clicked, this, [this] {emit activitySelected(activities.value(getLastActivity()));});
 
     currentLocationId = -1;
 
@@ -72,13 +72,14 @@ void GenActivity::generate()
     QHash<int, Activity> availableActivities = activities;
     QList<QPair<int, Activity>> possibleActivities;
     int totalWeight = 0;
-
+    int lastActivityId = getLastActivity();
     bool forceItems = ui->forceItemCheck->isChecked();
     int maxDuration = ui->durationSpin->time().hour()*60 + ui->durationSpin->time().minute();
     int personCount = ui->peopleCntSpin->value();
 
     for (const auto &[id, activity] : availableActivities.asKeyValueRange())
     {
+        if (id == lastActivityId) continue;
         if (maxDuration != 0 && activity.duration > maxDuration) continue;
         if (activity.max_players < personCount) continue;
         if (personCount != 0 && activity.min_players > personCount) continue;
@@ -93,6 +94,7 @@ void GenActivity::generate()
 
         QSet<int> overlapForcedTags = forcedTags;
         if (overlapForcedTags.subtract(activity.tags).count() != 0) continue;
+
 
         QSet<int> overlap = activity.tags;
         overlap.intersect(selectedTags);
@@ -118,16 +120,57 @@ void GenActivity::generate()
     {
         if (rand < activity.first)
         {
-            if (SelectedActivityWindow->isHidden())
-            {
-                SelectedActivityWindow->show();
-            }
-            emit activitySelected(activity.second); //TODO: fix segmentation fault
+            emit activitySelected(activity.second);
+            saveLastActivity(availableActivities.key(activity.second));
             return;
         } else {
             rand -= activity.first;
         }
     }
+}
+
+void GenActivity::saveLastActivity(int activityId)
+{
+    QSqlDatabase activityDb = QSqlDatabase::database("activity");
+    QSqlQuery query(activityDb);
+
+    activityDb.transaction();
+
+    query.prepare(
+        "INSERT INTO MiscData (name, data) "
+        "VALUES (:name, :data) "
+        "ON CONFLICT(name) DO UPDATE SET "
+        "data = excluded.data"
+        );
+
+    query.bindValue(":name", "lastActivityId");
+    query.bindValue(":data", activityId);
+
+    if (!query.exec()) {
+        qInfo() << "Insert failed:" << query.lastError();
+        activityDb.rollback();
+        return;
+    }
+
+    activityDb.commit();
+}
+
+int GenActivity::getLastActivity()
+{
+    QSqlDatabase activityDb = QSqlDatabase::database("activity");
+
+    QSqlQuery query(activityDb);
+
+    if (!query.exec("SELECT data FROM MiscData WHERE name = 'lastActivityId'")) {
+        qWarning() << "Query failed:" << query.lastError();
+    } else {
+        while (query.next()) {
+            return query.value(0).toInt();
+        }
+    }
+
+
+return -1;
 }
 
 void GenActivity::loadLocations()

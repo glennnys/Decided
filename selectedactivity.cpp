@@ -13,8 +13,9 @@ SelectedActivity::SelectedActivity(QWidget *parent)
     connect(ui->rerollBtn, &QPushButton::clicked, this, [this] {emit rerollActivity(selectedActivity);});
     connect(ui->closeBtn, &QPushButton::clicked, this, &SelectedActivity::hide);
 
+
     ui->closeableWidget->setMaximumHeight(0);
-    this->setMaximumHeight(ui->topLabel->height());
+    this->setMaximumHeight(0);
 
     loadData();
 }
@@ -51,53 +52,56 @@ void SelectedActivity::toggleWidget()
 {
     const bool opening = ui->closeableWidget->maximumHeight() == 0;
 
-    const int windowDelta = ui->closeableWidget->sizeHint().height();
-
-    auto *contentAnim = new QPropertyAnimation(ui->closeableWidget, "maximumHeight", this);
-    contentAnim->setDuration(250);
-    contentAnim->setEasingCurve(QEasingCurve::OutCubic);
-
-    auto *windowAnim = new QPropertyAnimation(this, "maximumHeight", this); // animates window size
-    windowAnim->setDuration(250);
-    windowAnim->setEasingCurve(QEasingCurve::OutCubic);
-    windowAnim->setStartValue(this->height());
-    windowAnim->setEndValue(this->height() + (opening ? windowDelta : -windowDelta));
-
     if (opening)
     {
-        ui->closeableWidget->setMaximumHeight(QWIDGETSIZE_MAX);
-        contentAnim->setStartValue(0);
-        contentAnim->setEndValue(ui->closeableWidget->sizeHint().height());
         ui->revealBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoUp));
         ui->revealBtn->setText("Hide  ");
+        ui->closeableWidget->setMaximumHeight(QWIDGETSIZE_MAX);
+        this->setMaximumHeight(QWIDGETSIZE_MAX);
     }
     else
     {
-        contentAnim->setStartValue(ui->closeableWidget->height());
-        contentAnim->setEndValue(0);
         ui->revealBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoDown));
         ui->revealBtn->setText("Reveal  ");
+        ui->closeableWidget->setMaximumHeight(0);
+        this->setMaximumHeight(0);
     }
-
-    // make sure the layout doesn't clamp the window below the animation target
-    // connect(windowAnim, &QPropertyAnimation::valueChanged, this, [this] {this->setMinimumHeight(v.toInt());});
-
-    windowAnim->start(QAbstractAnimation::DeleteWhenStopped);
-    contentAnim->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
 void SelectedActivity::fillActivity(Activity selectedActivity)
 {
+    if (selectedActivity.name == "") return;
+
+    if (this->isHidden())
+    {
+        this->show();
+    }
     this->selectedActivity = selectedActivity;
     ui->namePlaceholder->setText(selectedActivity.name + "!");
+
+    //player count formatting
     if (selectedActivity.min_players == selectedActivity.max_players){
-        ui->peoplePlaceholder->setText("Number of people: " + QString::number(selectedActivity.min_players));
+        ui->peoplePlaceholder->setText("Number of players: " + QString::number(selectedActivity.min_players));
     }
     else
     {
-        ui->peoplePlaceholder->setText("Number of people: " + QString::number(selectedActivity.min_players) + "-" + QString::number(selectedActivity.max_players));
+        ui->peoplePlaceholder->setText("Number of players: " + QString::number(selectedActivity.min_players) + "-" + QString::number(selectedActivity.max_players));
     }
-    ui->durationPlaceholder->setText("Estimated duration: " + QString::number(selectedActivity.duration / 60) + ":" + QString::number(selectedActivity.duration % 60));
+
+    //duration formatting
+    if (selectedActivity.duration < 60)
+    {
+        ui->durationPlaceholder->setText("Estimated duration: " + QString::number(selectedActivity.duration) + "m");
+    }
+    else if (selectedActivity.duration/60 == 0)
+    {
+        ui->durationPlaceholder->setText("Estimated duration: " + QString::number(selectedActivity.duration/60) + "h");
+    }
+    else
+    {
+        ui->durationPlaceholder->setText("Estimated duration: " + QString::number(selectedActivity.duration / 60) + "h" + QString::number(selectedActivity.duration % 60) + "m");
+    }
+
     ui->descriptionBox->setText(selectedActivity.description);
 
     ui->tagList->clear();
