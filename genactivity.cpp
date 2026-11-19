@@ -46,6 +46,7 @@ GenActivity::GenActivity(QWidget *parent)
     connect(this, &GenActivity::activitySelected, SelectedActivityWindow, &SelectedActivity::fillActivity);
     connect(SelectedActivityWindow, &SelectedActivity::rerollActivity, this, &GenActivity::generate);
     connect(ui->lastBtn, &QPushButton::clicked, this, [this] {emit activitySelected(activities.value(getLastActivity()));});
+    connect(tagSelector, &MngTags::cancelled, selectTags, &QDialog::hide);
 
     currentLocationId = -1;
 
@@ -231,7 +232,7 @@ void GenActivity::setCurrentLocation(QString locationName)
 {
     int newLocationId = find_same_name(locationName, newLocations);
 
-    if (newLocationId > 0 && newLocationId != currentLocationId)
+    if (newLocationId > 0)
     {
         currentLocationId = newLocationId;
         selectedItems = newLocations[currentLocationId].items;
