@@ -100,8 +100,8 @@ void GenActivity::generate()
         QSet<int> overlap = activity.tags;
         overlap.intersect(selectedTags);
 
-        //+1 weight gives all viable options a chance but heavily favous more overlap, current activity should have no weight.
-        auto weight = overlap.count() * 5 + 1;
+        //+1 weight gives all viable options a chance but heavily favours more overlap
+        auto weight = overlap.count() * 10 + 1;
         possibleActivities.append(qMakePair(weight, activity));
         totalWeight += weight;
     }
