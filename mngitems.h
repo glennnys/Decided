@@ -44,6 +44,7 @@ private:
     void close();
     void cancel_items();
     void change_selected(QListWidgetItem *list_item);
+    void newItem();
 signals:
     void close_items();
 };

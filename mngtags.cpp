@@ -17,9 +17,8 @@ MngTags::MngTags(QWidget *parent, bool selectOnly)
     connect(ui->editBtn, &QPushButton::clicked, this, &MngTags::toggleEdit);
     connect(ui->tag_entry, &QLineEdit::returnPressed, this, &MngTags::add_tag);
     connect(ui->resetTagBtn, &QPushButton::clicked, this, &MngTags::cancel_tag);
-    connect(ui->saveCancelTagBtns, &QDialogButtonBox::accepted, this, &MngTags::confirm_tags);
-    connect(ui->saveCancelTagBtns, &QDialogButtonBox::rejected, this, &MngTags::cancel_tags);
-    connect(ui->closeBtn, &QPushButton::clicked, this, &MngTags::close);
+    connect(ui->confirmListBtn, &QPushButton::clicked, this, &MngTags::confirm_tags);
+    connect(ui->cancelListBtn, &QPushButton::clicked, this, &MngTags::cancel_tags);
     ui->deleteBtn->setChecked(false);
     toggleDelete();
     load_tags();
@@ -31,8 +30,7 @@ MngTags::MngTags(QWidget *parent, bool selectOnly)
         ui->deleteBtn->deleteLater();
         ui->editBtn->hide();
         ui->editBtn->deleteLater();
-        ui->closeBtn->hide();
-        ui->closeBtn->deleteLater();
+        clearLayout(ui->confirm_btn_box->layout());
         clearLayout(ui->addTagLayout->layout());
     }
 }
@@ -139,6 +137,8 @@ void MngTags::confirm_tags()
     }
 
     emit tags_selected(tags);
+
+    close();
 }
 
 void MngTags::cancel_tags()
@@ -147,6 +147,8 @@ void MngTags::cancel_tags()
     set_tag_display();
 
     emit cancelled();
+
+    close();
 }
 
 void MngTags::set_tag_display()
@@ -204,6 +206,8 @@ void MngTags::cancel_tag()
 
     ui->tag_label->setText("New tag");
     ui->add_tag_btn->setText("Add");
+    ui->add_tag_btn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+    ui->add_tag_btn->setToolTip("Create new tag");
 
     editing_tag = -1;
 }
@@ -345,6 +349,8 @@ void MngTags::edit_tag(QListWidgetItem *list_item)
     if (item_id < 0) return;
     ui->tag_label->setText("Edit tag");
     ui->add_tag_btn->setText("Edit");
+    ui->add_tag_btn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+    ui->add_tag_btn->setToolTip("Edit the tag");
 
     ui->tag_entry->setText(list_item->text());
 

@@ -56,15 +56,39 @@ void SelectedActivity::toggleWidget()
     {
         ui->revealBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoUp));
         ui->revealBtn->setText("Hide  ");
-        ui->closeableWidget->setMaximumHeight(QWIDGETSIZE_MAX);
-        this->setMaximumHeight(QWIDGETSIZE_MAX);
+
+        int start = 0;
+        int end = ui->closeableWidget->sizeHint().height();
+
+        auto *animation = new QPropertyAnimation(ui->closeableWidget, "maximumHeight");
+        animation->setDuration(250);
+        animation->setStartValue(start);
+        animation->setEndValue(end);
+        animation->setEasingCurve(QEasingCurve::OutCubic);
+
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+        connect(animation, &QPropertyAnimation::finished, this, [this]() {
+            ui->closeableWidget->setMaximumHeight(QWIDGETSIZE_MAX);
+            this->setMaximumHeight(QWIDGETSIZE_MAX);
+        });
     }
     else
     {
+        this->setMaximumHeight(0);
         ui->revealBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::GoDown));
         ui->revealBtn->setText("Reveal  ");
-        ui->closeableWidget->setMaximumHeight(0);
-        this->setMaximumHeight(0);
+
+        int start = ui->closeableWidget->height();
+        int end = 0;
+
+        auto *animation = new QPropertyAnimation(ui->closeableWidget, "maximumHeight");
+        animation->setDuration(250);
+        animation->setStartValue(start);
+        animation->setEndValue(end);
+        animation->setEasingCurve(QEasingCurve::OutCubic);
+
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
     }
 }
 

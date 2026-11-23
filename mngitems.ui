@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>461</width>
-    <height>657</height>
+    <width>387</width>
+    <height>569</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -292,15 +292,22 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="closeBtn">
-         <property name="toolTip">
-          <string>Hide item manager</string>
-         </property>
+        <widget class="QPushButton" name="cancel_list_btn">
          <property name="text">
-          <string/>
+          <string>reset</string>
          </property>
          <property name="icon">
-          <iconset theme="QIcon::ThemeIcon::GoNext"/>
+          <iconset theme="QIcon::ThemeIcon::WindowClose"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="confirm_list_btn">
+         <property name="text">
+          <string>Confirm</string>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::EditRedo"/>
          </property>
         </widget>
        </item>
@@ -309,7 +316,7 @@
     </layout>
    </item>
    <item>
-    <widget class="QWidget" name="widget" native="true">
+    <widget class="QWidget" name="item_widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <item>
        <widget class="Line" name="line">

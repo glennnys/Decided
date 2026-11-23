@@ -181,7 +181,7 @@
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="confirm_btn_box">
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -201,7 +201,7 @@
         <string>Reset tag list to the original state</string>
        </property>
        <property name="text">
-        <string>Cancel</string>
+        <string>reset</string>
        </property>
        <property name="icon">
         <iconset theme="QIcon::ThemeIcon::WindowClose"/>
@@ -218,19 +218,6 @@
        </property>
        <property name="icon">
         <iconset theme="QIcon::ThemeIcon::EditRedo"/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="closeBtn">
-       <property name="toolTip">
-        <string>Hide tag manager</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::GoNext"/>
        </property>
       </widget>
      </item>

@@ -1,5 +1,6 @@
 #include "mngitems.h"
 #include "ui_mngitems.h"
+#include <QPropertyAnimation>
 
 MngItems::MngItems(QWidget *parent)
     : QWidget(parent)
@@ -10,8 +11,9 @@ MngItems::MngItems(QWidget *parent)
     editing_item = -1;
     connect(ui->search_item_entry, &QLineEdit::textChanged, this, &MngItems::set_item_display);
     connect(ui->search_item_refresh, &QPushButton::clicked, this, [this] {ui->search_item_entry->clear();});
-    connect(ui->saveCancelItemBtns, &QDialogButtonBox::rejected, this, &MngItems::cancel_item);
-    connect(ui->saveCancelItemsBtns, &QDialogButtonBox::accepted, this, &MngItems::add_item);
+    connect(ui->newBtn, &QPushButton::clicked, this, &MngItems::newItem);
+    connect(ui->resetItemBtn, &QPushButton::clicked, this, &MngItems::cancel_item);
+    connect(ui->addItemBtn, &QPushButton::clicked, this, &MngItems::add_item);
     connect(ui->delete_item_btn, &QPushButton::clicked, this, &MngItems::delete_item);
     connect(ui->existing_item_list, &QListWidget::itemClicked, this, &MngItems::change_selected);
     connect(ui->selected_item_list, &QListWidget::itemClicked, this, &MngItems::change_selected);
@@ -22,10 +24,10 @@ MngItems::MngItems(QWidget *parent)
     connect(ui->add_item_btn,    &QPushButton::clicked, this, &MngItems::select_item);
     connect(ui->remove_item_btn, &QPushButton::clicked, this, &MngItems::deselect_item);
     connect(ui->reset_item_list, &QPushButton::clicked, this, &MngItems::reset_selection);
-    connect(ui->closeBtn, &QPushButton::clicked, this, &MngItems::close_items);
-    // connect(ui->saveCancelItemsBtns, &QDialogButtonBox::accepted, this, &MngItems::close_items);
-    connect(ui->saveCancelItemsBtns, &QDialogButtonBox::rejected, this, &MngItems::cancel_items);
+    connect(ui->cancel_list_btn, &QPushButton::clicked, this, &MngItems::cancel_items);
+    connect(ui->confirm_list_btn, &QPushButton::clicked, this, &MngItems::close);
 
+    ui->item_widget->setMaximumHeight(0);
     load_items();
     set_item_display();
 }
@@ -167,10 +169,49 @@ void MngItems::cancel_item()
     ui->item_desc_entry->clear();
 
     ui->item_lbl->setText("New item");
+    ui->addItemBtn->setText("Add");
+    ui->addItemBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::ListAdd));
+    ui->addItemBtn->setToolTip("Add the new item to the list");
 
     editing_item = -1;
 
     set_item_display();
+}
+
+void MngItems::newItem()
+{
+    cancel_item();
+
+    if (ui->item_widget->maximumHeight() == 0)
+    {
+        int start = 0;
+        int end = this->height()/2;
+
+        auto *animation = new QPropertyAnimation(ui->item_widget, "maximumHeight");
+        animation->setDuration(250);
+        animation->setStartValue(start);
+        animation->setEndValue(end);
+        animation->setEasingCurve(QEasingCurve::OutCubic);
+
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+        connect(animation, &QPropertyAnimation::finished, this, [this]() {
+            ui->item_widget->setMaximumHeight(QWIDGETSIZE_MAX);
+        });
+    }
+    else
+    {
+        int start = ui->item_widget->height();
+        int end = 0;
+
+        auto *animation = new QPropertyAnimation(ui->item_widget, "maximumHeight");
+        animation->setDuration(250);
+        animation->setStartValue(start);
+        animation->setEndValue(end);
+        animation->setEasingCurve(QEasingCurve::OutCubic);
+
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+    }
 }
 
 void MngItems::add_item()
@@ -230,7 +271,7 @@ void MngItems::add_item()
         ui->existing_item_list->sortItems();
     }
 
-    cancel_item();
+    newItem();
 }
 
 void MngItems::delete_item()
@@ -289,6 +330,9 @@ void MngItems::edit_item()
 
     if (item_id < 0) return;
     ui->item_lbl->setText("Edit item");
+    ui->addItemBtn->setText("Edit");
+    ui->addItemBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+    ui->addItemBtn->setToolTip("Edit the item");
 
     ui->item_name_entry->setText(new_item_list[item_id].name);
     ui->item_desc_entry->setText(new_item_list[item_id].description);
