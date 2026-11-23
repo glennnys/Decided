@@ -306,11 +306,13 @@ void MngTags::toggleDelete()
         ui->tag_list->clearSelection();
         connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::delete_tag);
         ui->deleteBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FormatJustifyFill));
+        ui->editBtn->setToolTip("Toggle to selection mode");
         ui->tag_list->setSelectionMode(QAbstractItemView::NoSelection);
         return;
     } else {
         disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::delete_tag);
         ui->deleteBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::EditDelete));
+        ui->editBtn->setToolTip("Toggle to delete mode");
         ui->tag_list->setSelectionMode(QAbstractItemView::MultiSelection);
         set_tag_display();
         return;
@@ -329,11 +331,13 @@ void MngTags::toggleEdit()
         ui->tag_list->clearSelection();
         connect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
         ui->editBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::FormatJustifyFill));
+        ui->editBtn->setToolTip("Toggle to selection mode");
         ui->tag_list->setSelectionMode(QAbstractItemView::NoSelection);
         return;
     } else {
         disconnect(ui->tag_list, &QListWidget::itemClicked, this, &MngTags::edit_tag);
         ui->editBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+        ui->editBtn->setToolTip("Toggle to edit mode");
         ui->tag_list->setSelectionMode(QAbstractItemView::MultiSelection);
         set_tag_display();
         cancel_tag();

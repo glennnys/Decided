@@ -538,7 +538,7 @@ void MngActivity::edit_activity()
     ui->act_lbl->setText("Edit activity");
     ui->addActBtn->setText("Edit");
     ui->addActBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
-    ui->addActBtn->setToolTip("Add the new activity to the list");
+    ui->addActBtn->setToolTip("Edit the activity");
 
     ui->act_name_entry->setText(activity.name);
     ui->act_desc_entry->setText(activity.description);
