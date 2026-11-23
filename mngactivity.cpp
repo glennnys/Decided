@@ -33,8 +33,9 @@ MngActivity::MngActivity(QWidget *parent)
     editing_act = -1;
     connect(ui->search_act_entry, &QLineEdit::textChanged, this, &MngActivity::set_act_display);
     connect(ui->search_act_refresh, &QPushButton::clicked, this, [this] {ui->search_act_entry->clear();});
-    connect(ui->saveCancelActBtns, &QDialogButtonBox::accepted, this, &MngActivity::add_activity);
-    connect(ui->saveCancelActBtns, &QDialogButtonBox::rejected, this, &MngActivity::cancel_activity);
+    connect(ui->newBtn, &QPushButton::clicked, this, &MngActivity::newActivity);
+    connect(ui->addActBtn, &QPushButton::clicked, this, &MngActivity::add_activity);
+    connect(ui->resetActBtn, &QPushButton::clicked, this,[this] {if (editing_act>0) edit_activity(); else cancel_activity();});
     connect(ui->delete_act_btn, &QPushButton::clicked, this, &MngActivity::delete_activity);
     connect(ui->editBtn, &QPushButton::clicked, this, &MngActivity::edit_activity);
     connect(ui->act_list, &QListWidget::itemDoubleClicked, this, &MngActivity::edit_activity);
@@ -361,6 +362,10 @@ void MngActivity::load_activities()
 
 void MngActivity::cancel_activity()
 {
+    ui->act_lbl->setText("Edit activity");
+    ui->addActBtn->setText("Edit");
+    ui->addActBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
+
     ui->act_name_entry->clear();
     ui->act_desc_entry->clear();
     ui->act_dur_entry->setTime(QTime(0, 0));
@@ -375,6 +380,29 @@ void MngActivity::cancel_activity()
     tagWidget->cancel_tag();
     flowLayout->clear();
     set_act_display();
+}
+
+void MngActivity::newActivity()
+{
+    cancel_activity();
+
+    if (ui->activity_widget->maximumHeight() == 0)
+    {
+        int start = 0;
+        int end = this->height()/2;
+
+        auto *animation = new QPropertyAnimation(ui->activity_widget, "maximumHeight");
+        animation->setDuration(250);
+        animation->setStartValue(start);
+        animation->setEndValue(end);
+        animation->setEasingCurve(QEasingCurve::OutCubic);
+
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+
+        connect(animation, &QPropertyAnimation::finished, this, [this]() {
+            ui->activity_widget->setMaximumHeight(QWIDGETSIZE_MAX);
+        });
+    }
 }
 
 void MngActivity::add_activity()
@@ -446,6 +474,20 @@ void MngActivity::add_activity()
     tagWidget->cancel_tag();
     cancel_activity();
     flowLayout->clear();
+
+    if (ui->activity_widget->maximumHeight() > 0)
+    {
+        int start = ui->activity_widget->height();
+        int end = 0;
+
+        auto *animation = new QPropertyAnimation(ui->activity_widget, "maximumHeight");
+        animation->setDuration(250);
+        animation->setStartValue(start);
+        animation->setEndValue(end);
+        animation->setEasingCurve(QEasingCurve::OutCubic);
+
+        animation->start(QAbstractAnimation::DeleteWhenStopped);
+    }
 }
 
 void MngActivity::delete_activity()
@@ -486,6 +528,10 @@ void MngActivity::edit_activity()
 
     if (act_id < 0) return;
     auto activity = new_act_list[act_id];
+
+    ui->act_lbl->setText("Edit activity");
+    ui->addActBtn->setText("Edit");
+    ui->addActBtn->setIcon(QIcon::fromTheme(QIcon::ThemeIcon::DocumentProperties));
 
     ui->act_name_entry->setText(activity.name);
     ui->act_desc_entry->setText(activity.description);

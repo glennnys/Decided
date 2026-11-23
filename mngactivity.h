@@ -43,6 +43,7 @@ private:
 
     void load_activities();
     void cancel_activity();
+    void newActivity();
     void add_activity();
     void delete_activity();
     void edit_activity();

@@ -76,6 +76,9 @@ void SelectedActivity::fillActivity(Activity selectedActivity)
     {
         this->show();
     }
+
+    loadData();
+
     this->selectedActivity = selectedActivity;
     ui->namePlaceholder->setText(selectedActivity.name + "!");
 

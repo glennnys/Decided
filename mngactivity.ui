@@ -6,131 +6,184 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>653</width>
-    <height>750</height>
+    <width>484</width>
+    <height>548</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QHBoxLayout" name="horizontalLayout_4">
+   <property name="spacing">
+    <number>0</number>
+   </property>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
+   </property>
    <item>
-    <widget class="QDialogButtonBox" name="saveCancelAllBtns">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Save</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="editWindowLayout">
-     <property name="spacing">
-      <number>0</number>
-     </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item>
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QDialogButtonBox" name="saveCancelAllBtns">
+         <property name="font">
+          <font>
+           <pointsize>20</pointsize>
+          </font>
+         </property>
+         <property name="standardButtons">
+          <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Save</set>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_20">
+         <item>
+          <spacer name="horizontalSpacer_16">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_17">
+           <property name="font">
+            <font>
+             <pointsize>20</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Activity list</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_17">
+           <property name="orientation">
+            <enum>Qt::Orientation::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <item>
+          <widget class="QLineEdit" name="search_act_entry">
+           <property name="toolTip">
+            <string>Search activity list</string>
+           </property>
+           <property name="placeholderText">
+            <string>Search...</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="search_act_refresh">
+           <property name="toolTip">
+            <string>Reset search string</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="editBtn">
+           <property name="toolTip">
+            <string>Edit last selected activity</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="QIcon::ThemeIcon::DocumentProperties"/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="newBtn">
+           <property name="toolTip">
+            <string>create new activity</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="QIcon::ThemeIcon::ListAdd"/>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="delete_act_btn">
+           <property name="toolTip">
+            <string>Delete selected activity</string>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset theme="QIcon::ThemeIcon::EditDelete"/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QListWidget" name="act_list"/>
+       </item>
+      </layout>
+     </item>
      <item>
       <widget class="QWidget" name="activity_widget" native="true">
-       <layout class="QVBoxLayout" name="verticalLayout">
+       <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_20">
-          <item>
-           <spacer name="horizontalSpacer_16">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QLabel" name="label_17">
-            <property name="font">
-             <font>
-              <pointsize>20</pointsize>
-             </font>
-            </property>
-            <property name="text">
-             <string>Activity list</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="horizontalSpacer_17">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5">
-          <item>
-           <widget class="QLineEdit" name="search_act_entry">
-            <property name="toolTip">
-             <string>Search activity list</string>
-            </property>
-            <property name="placeholderText">
-             <string>Search...</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="search_act_refresh">
-            <property name="toolTip">
-             <string>Reset search string</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="editBtn">
-            <property name="toolTip">
-             <string>Edit last selected activity</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="QIcon::ThemeIcon::DocumentProperties"/>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="delete_act_btn">
-            <property name="toolTip">
-             <string>Delete selected activity</string>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset theme="QIcon::ThemeIcon::EditDelete"/>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QListWidget" name="act_list"/>
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+         </widget>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_16">
@@ -155,7 +208,7 @@
              </font>
             </property>
             <property name="text">
-             <string>Activity</string>
+             <string>New activity</string>
             </property>
            </widget>
           </item>
@@ -182,6 +235,49 @@
              <string>Activity name</string>
             </property>
            </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="act_name_entry">
+            <property name="minimumSize">
+             <size>
+              <width>128</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="inputMask">
+             <string/>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="placeholderText">
+             <string>Insert activity name</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <layout class="QVBoxLayout" name="verticalLayout_2">
+            <item>
+             <widget class="QPushButton" name="edit_tags_btn">
+              <property name="toolTip">
+               <string>Opens tag manager panel</string>
+              </property>
+              <property name="text">
+               <string>Edit tags</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QPushButton" name="edit_item_btn">
+              <property name="toolTip">
+               <string>Opens item manager panel</string>
+              </property>
+              <property name="text">
+               <string>Edit requirements</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
           <item row="1" column="1">
            <widget class="QWidget" name="tag_holder" native="true"/>
@@ -236,11 +332,28 @@
            </widget>
           </item>
           <item row="3" column="1">
-           <widget class="QTimeEdit" name="act_dur_entry">
-            <property name="toolTip">
-             <string>Set the average/typical duration for the activity</string>
-            </property>
-           </widget>
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QTimeEdit" name="act_dur_entry">
+              <property name="toolTip">
+               <string>Set the average/typical duration for the activity</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
           </item>
           <item row="4" column="0">
            <widget class="QLabel" name="label_6">
@@ -271,6 +384,19 @@
                    <number>20</number>
                   </property>
                  </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
                 </item>
                </layout>
               </item>
@@ -325,6 +451,19 @@
                   </property>
                  </widget>
                 </item>
+                <item>
+                 <spacer name="horizontalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Orientation::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
                </layout>
               </item>
               <item>
@@ -356,57 +495,46 @@
             </item>
            </layout>
           </item>
-          <item row="1" column="0">
-           <layout class="QVBoxLayout" name="verticalLayout_2">
-            <item>
-             <widget class="QPushButton" name="edit_tags_btn">
-              <property name="toolTip">
-               <string>Opens tag manager panel</string>
-              </property>
-              <property name="text">
-               <string>Edit tags</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="edit_item_btn">
-              <property name="toolTip">
-               <string>Opens item manager panel</string>
-              </property>
-              <property name="text">
-               <string>Edit requirements</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="act_name_entry">
-            <property name="minimumSize">
-             <size>
-              <width>128</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="inputMask">
-             <string/>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="placeholderText">
-             <string>Insert activity name</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_14">
+         <layout class="QHBoxLayout" name="horizontalLayout_2">
           <item>
-           <widget class="QDialogButtonBox" name="saveCancelActBtns">
-            <property name="standardButtons">
-             <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="resetActBtn">
+            <property name="toolTip">
+             <string>Clear all fields</string>
+            </property>
+            <property name="text">
+             <string>Reset</string>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::WindowClose"/>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="addActBtn">
+            <property name="toolTip">
+             <string>Add the new activity to the list</string>
+            </property>
+            <property name="text">
+             <string>Add</string>
+            </property>
+            <property name="icon">
+             <iconset theme="QIcon::ThemeIcon::ListAdd"/>
             </property>
            </widget>
           </item>
@@ -415,92 +543,27 @@
        </layout>
       </widget>
      </item>
-     <item>
-      <widget class="Line" name="line_4">
-       <property name="orientation">
-        <enum>Qt::Orientation::Vertical</enum>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QStackedWidget" name="placeholder">
-       <property name="maximumSize">
-        <size>
-         <width>0</width>
-         <height>16777215</height>
-        </size>
-       </property>
-      </widget>
-     </item>
     </layout>
+   </item>
+   <item>
+    <widget class="Line" name="line_4">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QStackedWidget" name="placeholder">
+     <property name="maximumSize">
+      <size>
+       <width>0</width>
+       <height>16777215</height>
+      </size>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>act_min_p_slider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>act_min_p_spin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>273</x>
-     <y>799</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>284</x>
-     <y>769</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>act_min_p_spin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>act_min_p_slider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>259</x>
-     <y>774</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>253</x>
-     <y>794</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>act_max_p_slider</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>act_max_p_spin</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>487</x>
-     <y>794</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>508</x>
-     <y>771</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>act_max_p_spin</sender>
-   <signal>valueChanged(int)</signal>
-   <receiver>act_max_p_slider</receiver>
-   <slot>setValue(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>556</x>
-     <y>771</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>540</x>
-     <y>794</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

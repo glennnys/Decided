@@ -69,7 +69,6 @@ void GenActivity::setData(QHash<int, Activity> activities, QHash<int, Item> item
 
 void GenActivity::generate()
 {
-    //TODO: fix current activity logic
     QHash<int, Activity> availableActivities = activities;
     QList<QPair<int, Activity>> possibleActivities;
     int totalWeight = 0;

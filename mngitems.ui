@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>646</width>
-    <height>972</height>
+    <width>461</width>
+    <height>657</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout_3">
+  <layout class="QVBoxLayout" name="verticalLayout_7">
    <property name="spacing">
     <number>0</number>
    </property>
@@ -30,82 +30,39 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="QLabel" name="item_lbl_2">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
+    <layout class="QVBoxLayout" name="verticalLayout_6">
+     <property name="leftMargin">
+      <number>9</number>
      </property>
-     <property name="text">
-      <string>Item list</string>
+     <property name="topMargin">
+      <number>9</number>
      </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
+     <property name="rightMargin">
+      <number>9</number>
      </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="bottomMargin">
+      <number>9</number>
+     </property>
      <item>
-      <widget class="QLineEdit" name="search_item_entry">
-       <property name="toolTip">
-        <string>Search item list</string>
-       </property>
-       <property name="placeholderText">
-        <string>Search items...</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="search_item_refresh">
-       <property name="toolTip">
-        <string>Reset search string</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="editBtn">
-       <property name="toolTip">
-        <string>Edit last selected item</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::DocumentProperties"/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="delete_item_btn">
-       <property name="toolTip">
-        <string>Delete selected item</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::EditDelete"/>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QLabel" name="label_3">
+        <spacer name="horizontalSpacer_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="item_lbl_2">
          <property name="font">
           <font>
-           <pointsize>12</pointsize>
+           <pointsize>20</pointsize>
           </font>
          </property>
          <property name="text">
@@ -117,77 +74,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="existing_item_list"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_5">
-       <item>
-        <spacer name="verticalSpacer">
+        <spacer name="horizontalSpacer_4">
          <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
+          <enum>Qt::Orientation::Horizontal</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <layout class="QVBoxLayout" name="verticalLayout_4">
-         <item>
-          <widget class="QPushButton" name="add_item_btn">
-           <property name="toolTip">
-            <string>Add selected item as activity requirement</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::ListAdd"/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="remove_item_btn">
-           <property name="toolTip">
-            <string>Remove selected item as a requirement</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::ListRemove"/>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="reset_item_list">
-           <property name="toolTip">
-            <string>Remove all items from activity requirements</string>
-           </property>
-           <property name="text">
-            <string/>
-           </property>
-           <property name="icon">
-            <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer_2">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
+           <width>40</width>
+           <height>20</height>
           </size>
          </property>
         </spacer>
@@ -195,121 +89,323 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
-        <widget class="QLabel" name="label_4">
-         <property name="font">
-          <font>
-           <pointsize>12</pointsize>
-           <bold>false</bold>
-          </font>
+        <widget class="QLineEdit" name="search_item_entry">
+         <property name="toolTip">
+          <string>Search item list</string>
          </property>
-         <property name="text">
-          <string>Activity requirements</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
+         <property name="placeholderText">
+          <string>Search items...</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="selected_item_list"/>
+        <widget class="QPushButton" name="search_item_refresh">
+         <property name="toolTip">
+          <string>Reset search string</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="editBtn">
+         <property name="toolTip">
+          <string>Edit last selected item</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::DocumentProperties"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="newBtn">
+         <property name="toolTip">
+          <string>Create new item</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::ListAdd"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="delete_item_btn">
+         <property name="toolTip">
+          <string>Delete selected item</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::EditDelete"/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_2">
+         <item>
+          <widget class="QLabel" name="label_3">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Item list</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="existing_item_list"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout_5">
+         <item>
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QPushButton" name="add_item_btn">
+             <property name="toolTip">
+              <string>Add selected item as activity requirement</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset theme="QIcon::ThemeIcon::ListAdd"/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="remove_item_btn">
+             <property name="toolTip">
+              <string>Remove selected item as a requirement</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset theme="QIcon::ThemeIcon::ListRemove"/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="reset_item_list">
+             <property name="toolTip">
+              <string>Remove all items from activity requirements</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+             <property name="icon">
+              <iconset theme="QIcon::ThemeIcon::ViewRefresh"/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Orientation::Vertical</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>40</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QVBoxLayout" name="verticalLayout">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="text">
+            <string>Activity requirements</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QListWidget" name="selected_item_list"/>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <spacer name="horizontalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="closeBtn">
+         <property name="toolTip">
+          <string>Hide item manager</string>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+         <property name="icon">
+          <iconset theme="QIcon::ThemeIcon::GoNext"/>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
     </layout>
    </item>
    <item>
-    <widget class="QDialogButtonBox" name="saveCancelItemsBtns">
-     <property name="toolTip">
-      <string>Apply or cancel requirement changes</string>
-     </property>
-     <property name="standardButtons">
-      <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="Line" name="line">
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <spacer name="verticalSpacer_3">
-     <property name="orientation">
-      <enum>Qt::Orientation::Vertical</enum>
-     </property>
-     <property name="sizeType">
-      <enum>QSizePolicy::Policy::Minimum</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>5</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <widget class="QLabel" name="item_lbl">
-     <property name="font">
-      <font>
-       <pointsize>20</pointsize>
-      </font>
-     </property>
-     <property name="text">
-      <string>New item</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_11">
-       <property name="text">
-        <string>Item name</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignmentFlag::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLineEdit" name="item_name_entry">
-       <property name="text">
-        <string/>
-       </property>
-       <property name="placeholderText">
-        <string>Insert name</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_12">
-       <property name="text">
-        <string>Item description
+    <widget class="QWidget" name="widget" native="true">
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <item>
+       <widget class="Line" name="line">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="item_lbl">
+          <property name="font">
+           <font>
+            <pointsize>20</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>New item</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QFormLayout" name="formLayout">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_11">
+          <property name="text">
+           <string>Item name</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QLineEdit" name="item_name_entry">
+          <property name="text">
+           <string/>
+          </property>
+          <property name="placeholderText">
+           <string>Insert name</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_12">
+          <property name="text">
+           <string>Item description
 (can be left empy)</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignmentFlag::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QTextEdit" name="item_desc_entry">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="html">
-        <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QTextEdit" name="item_desc_entry">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="MinimumExpanding" vsizetype="Expanding">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="html">
+           <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;meta charset=&quot;utf-8&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 hr { height: 1px; border-width: 0; }
@@ -317,37 +413,56 @@ li.unchecked::marker { content: &quot;\2610&quot;; }
 li.checked::marker { content: &quot;\2612&quot;; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
-     <item>
-      <widget class="QDialogButtonBox" name="saveCancelItemBtns">
-       <property name="toolTip">
-        <string>Add or edit current selected item</string>
-       </property>
-       <property name="standardButtons">
-        <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="closeBtn">
-       <property name="toolTip">
-        <string>Hide item manager</string>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="icon">
-        <iconset theme="QIcon::ThemeIcon::GoNext"/>
-       </property>
-      </widget>
-     </item>
-    </layout>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QPushButton" name="resetItemBtn">
+          <property name="toolTip">
+           <string>Clear all item fields</string>
+          </property>
+          <property name="text">
+           <string>Reset</string>
+          </property>
+          <property name="icon">
+           <iconset theme="QIcon::ThemeIcon::WindowClose"/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="addItemBtn">
+          <property name="toolTip">
+           <string>Add the new item to the list</string>
+          </property>
+          <property name="text">
+           <string>Add</string>
+          </property>
+          <property name="icon">
+           <iconset theme="QIcon::ThemeIcon::ListAdd"/>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

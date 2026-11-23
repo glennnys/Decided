@@ -42,7 +42,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Add tags</string>
+          <string>Select tags</string>
          </property>
         </widget>
        </item>
